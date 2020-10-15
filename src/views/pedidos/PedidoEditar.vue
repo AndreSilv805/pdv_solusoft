@@ -32,7 +32,7 @@
              <div class="mt-3 info">Selecione um tamanho:{{selecaotamanho}} </div>
             <b-form-select v-model="selecaotamanho" :options="pedidoslocal.tamanhoss" size="sm" class="mt-3"></b-form-select>
 
-            <div class="mt-3 info">Selecione uma cor:{{selecao}} </div>
+           <!-- <div class="mt-3 info">Selecione uma cor:{{selecao}} </div>
             <select v-model="selecao" class="custom-select mr-sm-2" >
                 <option value="null" selected>Escolha uma cor</option>
                 <option  v-for="cor in optionCor" :key="cor" :v-model="cor">{{cor}}</option>
@@ -42,7 +42,7 @@
             <select v-model="selecaotam" class="custom-select mr-sm-2" >
                 <option value="null" selected>Escolha um tamanho</option>
                 <option  v-for="tamanho in optionTam" :key="tamanho" :v-model="tamanho">{{tamanho}}</option>
-            </select>
+            </select>-->
             
 
             <b-form-group class="p-0 text-left col-lg-4 float-left pr-2 pl-2" id="input-group-1" label="Quantidade" label-for="input-1">
@@ -67,8 +67,8 @@
                     placeholder="Tall textarea"
                     rows="10">
                 </b-form-textarea>-->
-                 <h6 class="mb-2">OBJ PRODUTO PARA ADICIONAR: {{pedidoslocal}}</h6><br>
-                <h6 class="mb-2">OBJ PRODUTOS SELECIONADOS:  {{pedido[0].produtos}}</h6>
+                <!-- <h6 class="mb-2">OBJ PRODUTO PARA ADICIONAR: {{pedidoslocal}}</h6><br>
+                <h6 class="mb-2">OBJ PRODUTOS SELECIONADOS:  {{pedido[0].produtos}}</h6>-->
                
                 
         </div>   
