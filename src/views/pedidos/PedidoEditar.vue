@@ -240,7 +240,24 @@ export default {
             
         },
 
+<<<<<<< HEAD
+        async adicionarProduto(){
+            const Objeto1 = Object.assign({},this.pedidoslocal)
+           await axios.put(`http://127.0.0.1/pdvsolusoft/blog/public/api/pedidos/1/add`,this.pedidoslocal);
+            this.pedido[0].produtos.push(Objeto1)
+            
+          this.pedidoslocal = { 
+          id: null, 
+          cod_produto: '', 
+          nome: '', 
+          valor: null,
+          cores:'',
+          tamanhos:'',
+          ped:{pedido: 0, produto: 0, id: 0, quantidade: 1, valor_vendido: 0.00},
+           }
+=======
         adicionar() {
+>>>>>>> parent of 97713ec... inserção de produtos via axios
 
 
           const Objeto1 = Object.assign({},this.pedidoslocal)
