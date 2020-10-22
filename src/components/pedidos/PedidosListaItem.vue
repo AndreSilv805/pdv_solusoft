@@ -2,7 +2,7 @@
     
      <tr>
       <td >{{pedido.cod_pedido}}</td>
-      <td >{{pedido.created_at}}</td>
+      <td >{{data}}</td>
       <td >{{pedido.observacao}}</td>
       <td ><router-link 
             :to="{ 
@@ -31,15 +31,13 @@ export default {
             required: true
         }
     },
-    methods: {
-        verDetalhes() {
-            // this.$router.push(`/contatos/${this.contato.id}`)
-            // this.$router.push({ path: `/contatos/${this.contato.id}` })
-            // this.$router.push({ path: '/contatos', params: { id: this.contato.id } })
-            // this.$router.push({ name: 'contato', params: { id: this.contato.id } })
-            // this.$router.replace({ name: 'contato', params: { id: this.contato.id } })
-        }
-    }
+
+    computed:{
+         data: function () {
+            return this.pedido.created_at
+        },
+    },
+
 }
 </script>
 

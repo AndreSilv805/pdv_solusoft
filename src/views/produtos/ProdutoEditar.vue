@@ -109,7 +109,6 @@ export default {
     },
     data() {
         return {
-            contato: undefined,
             mensagemErro: undefined,
             produto: {
                 cod_produto:'',
@@ -122,44 +121,35 @@ export default {
         }
     },
     
-    /*created() {
-        this.contato = EventBus.buscarContato(this.id)
-    },*/
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            // vm.contato = EventBus.buscarContato(vm.id)
-            vm.pegarProduto();
-           
+            vm.pegarProduto();    
         })
     },
    
-    
   computed:{
    valorbr: function () {
         return this.produto.valor.toLocaleString('pt-br',{style:'currency',currency:'BRL'})
         }
     },
     
-    methods:{
+  methods:{
          criarProduto() {
             
             axios.put(`http://127.0.0.1/pdvsolusoft/blog/public/api/produtos/${this.id}`,this.produto)
                 .then((response) => {
                     console.log('Produto criado com sucesso', response)
                 })
-
                 this.$router.push('/produtos')
             },
-        async editarProduto(){
 
+        async editarProduto(){
             const response = await axios.put(`http://127.0.0.1/pdvsolusoft/blog/public/api/produtos/${this.id}`,this.produto);
-            console.log('GET /produtos', response)
             this.produto = response.data;
         },
-        async pegarProduto(){
 
+        async pegarProduto(){
             const response = await axios.get(`http://127.0.0.1/pdvsolusoft/blog/public/api/produtos/${this.id}`);
-            console.log('GET /produtos', response)
             this.produto = response.data;
         },
     }

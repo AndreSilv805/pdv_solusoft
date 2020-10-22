@@ -11,14 +11,6 @@ export default new Vue({
         produtos: []
     },
     
-
-    created() {
-        this.$on('autenticar', (autenticado) => {
-            this.autenticado = autenticado
-        })
-
-    },
-
     methods: {
         buscarContato(id) {
             return Object.assign({}, this.contatos.find(c => c.id === id))

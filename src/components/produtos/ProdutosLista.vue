@@ -73,21 +73,14 @@ export default {
         ProdutosListaItem,
     },
 
-    props: ['produtos'],
+    props: ['busca'],
 
     data() {
         return {
-           
-            produtos2: [],
-            
+            produtos: [],  
         }
     },
-    beforeRouteEnter(to, from, next) {
-        next(vm => {
-            const prod = vm.getProdutos();
-            vm.produtos = prod;
-        })
-    },
+
     computed: {
         produtosFiltrados() {
             const busca = this.busca
@@ -95,34 +88,29 @@ export default {
                 ? this.produtos
                 : this.produtos.filter(p => p.nome.toLowerCase().includes(busca.toLowerCase()))
         }
-
     },
+
     created() {
      this.getProdutos();
-     
-  
     },
 
     methods: {
         async getProdutos() {
 
                 const response = await axios.get(`http://127.0.0.1/pdvsolusoft/blog/public/api/produtos`);
-                console.log('GET /produtos', response)
                 this.produtos = response.data;
 
         },
         async deletarTarefa(produto) {
-            const confirmar = window.confirm(`Deseja deletar a tarefa "${produto.nome}"?`)
+            const confirmar = window.confirm(`Deseja deletar o produto "${produto.nome}"?`)
             if (confirmar) {
 
                 try {
                     await axios.delete(`http://127.0.0.1/pdvsolusoft/blog/public/api/produtos/${produto.id}`)
-                    const indice = this.produtos.findIndex(t => t.id === produto.id)
-                    this.produtos.splice(indice, 1)
                 } catch(error) {
                     console.log('Erro ao deletar Tarefa: ', error)
                 } finally {
-                    console.log('Sempre executado!')
+                    this.getProdutos();
                 }
 
             }

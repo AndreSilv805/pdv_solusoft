@@ -6,11 +6,11 @@
                 <h3 class="font-weight-light">Lista de Pedidos</h3>
             </div>
             <div class="col-sm-2">
-                <router-link 
-                    :to="`/produtos/criar`"
-                    class="btn btn-info btn-sm float-right">
+                <button 
+                    @click="criarPedido"
+                    class="btn btn-info btn-sm float-right"> 
                     <span>Criar Pedido</span>
-                </router-link>
+                </button>
             </div>
         </div>
 
@@ -63,7 +63,7 @@
 
 import PedidosListaItem from '@/components/pedidos/PedidosListaItem.vue'
 
-import EventBus from './../../event-bus'
+
 import axios from 'axios'
 
 
@@ -73,13 +73,11 @@ export default {
         PedidosListaItem,
     },
 
-    props: ['busca'],
+    props: ['busca','pedidoss'],
 
     data() {
         return {
-            contatos: [],
             pedidos: [],
-            
         }
     },
 
@@ -92,22 +90,21 @@ export default {
         }
 
     },
+    
     created() {
      this.getPedidos();
-     this.pedidos = EventBus.pedidos
-  
+     
     },
 
     methods: {
         async getPedidos() {
 
                 const response = await axios.get(`http://127.0.0.1/pdvsolusoft/blog/public/api/pedidos`);
-                console.log('GET /produtos', response)
                 this.pedidos = response.data;
 
         },
         async deletarPedido(pedido) {
-            const confirmar = window.confirm(`Deseja deletar a tarefa "${pedido.id}"?`)
+            const confirmar = window.confirm(`Deseja deletar Pedido "${pedido.id}"?`)
             if (confirmar) {
 
                 try {
@@ -115,13 +112,19 @@ export default {
                     const indice = this.pedidos.findIndex(p => p.id === pedido.id)
                     this.pedidos.splice(indice, 1)
                 } catch(error) {
-                    console.log('Erro ao deletar Tarefa: ', error)
+                    console.log('Erro ao deletar Pedido: ', error)
                 } finally {
                     console.log('Sempre executado!')
                 }
 
             }
         },
+
+        async criarPedido() {
+            const response = await axios.post(`http://127.0.0.1/pdvsolusoft/blog/public/api/pedidos`);
+            this.$router.push({ path: `/pedidos/${response.data.id}/editar`})
+        },
+
         buscar(event) {
             this.$router.push({
                 path: '/pedidos',

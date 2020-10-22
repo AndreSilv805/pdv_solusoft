@@ -8,7 +8,7 @@
                 <router-link 
                     :to="`/clientes/criar`"
                     class="btn btn-info btn-sm float-right">
-                    <span>Criar</span>
+                    <span>Cadastro Cliente</span>
                 </router-link>
             </div>
         </div>
@@ -60,21 +60,21 @@
 
 import ClientesListaItem from '@/components/clientes/ClientesListaItem.vue'
 
-import EventBus from './../../event-bus'
+
 import axios from 'axios'
 
 export default {
     components: {
         ClientesListaItem
     },
-    props: ['busca'],
+    props: ['clientess','busca'],
 
     data() {
         return {
-            contatos: [],
             clientes: []
         }
     },
+
     computed: {
         clientesFiltrados() {
             const busca = this.busca
@@ -86,33 +86,30 @@ export default {
     },
     created() {
      this.getClientes();
-     this.contatos = EventBus.contatos
+     
   
     },
     methods: {
         async getClientes() {
 
                 const response = await axios.get(`http://127.0.0.1/pdvsolusoft/blog/public/api/clientes`);
-                console.log('GET /produtos', response)
                 this.clientes = response.data;
 
         },
-        async deletarCliente(client) {
-            const confirmar = window.confirm(`Deseja deletar a tarefa "${client.nome}"cliente?`)
+        async deletarCliente(cliente) {
+            const confirmar = window.confirm(`Deseja deletar cliente: "${cliente.nome}"?`)
             if (confirmar) {
                 try {
-                    const response = await axios.delete(`http://127.0.0.1/pdvsolusoft/blog/public/api/clientes/${client.id}`)
-                    const indice = this.clientes.findIndex(c => c.id === client.id)
-                    console.log('GET /produtos', response)
-                    this.clientes.splice(indice, 1)
+                    await axios.delete(`http://127.0.0.1/pdvsolusoft/blog/public/api/clientes/${cliente.id}`);
+      
                 } catch(error) {
-                    console.log('Erro ao deletar Tarefa: ', error)
-                } finally {
-                    console.log('Sempre executado!')
+                    console.log('Erro ao deletar Cliente: ', error)
+                } finally{
+                    this.getClientes();  
                 }
-
             }
         },
+
         buscar(event) {
             this.$router.push({
                 path: '/clientes',

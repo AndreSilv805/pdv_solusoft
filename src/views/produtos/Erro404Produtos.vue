@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="container mt-4">
         <div class="alert alert-warning">
             <h3 class="text-center">Erro 404!</h3>
             <p class="text-center">Página não encontrada.</p>

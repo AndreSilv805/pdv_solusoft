@@ -1,7 +1,7 @@
 <template>
     <div class="container mt-5">
     <!--<ProdutosLista :busca="busca" />-->
-    <ProdutosLista :produtos="produtos" />
+    <ProdutosLista :produtos="produtos" :busca="busca" />
     </div>
 </template>
 
@@ -37,7 +37,6 @@ export default {
         async getProdutos() {
 
                 const response = await axios.get(`http://127.0.0.1/pdvsolusoft/blog/public/api/produtos`);
-                console.log('GET /produtos', response)
                 this.produtos = response.data;
 
         },

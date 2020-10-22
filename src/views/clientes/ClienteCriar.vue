@@ -60,9 +60,9 @@
 
       <b-button type="submit" variant="primary">Salvar</b-button>
 
-       </b-form><!--fim criar produto-->
+       </b-form>
 
-    {{cliente}}
+
     </div>
 </template>
 

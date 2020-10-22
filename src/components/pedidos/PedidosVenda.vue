@@ -2,7 +2,7 @@
     <div style="height:600px" class=" col-sm-12 col-lg-8 float-left">
           
           
-          <div id="listgroup-ex" style="position:relative;  overflow-y:auto; height:600px">
+          <div id="listgroup-ex" style="position:relative;  overflow-y:auto; height:425px">
             
 
                 <table class="table">
@@ -19,49 +19,32 @@
                     </tr>
                 </thead>
 
-                <tbody class="table table-striped table-sm table-bordered">
-                   
+                <tbody class="table table-striped table-sm table-bordered">  
                    <PedidosVendaItem
                                 v-for="ped in pedido.items"
                                 @delete="deletarItem"
                                 :key="ped.id"
-                                :item="ped"/>
-                                
-                   <!--<tr v-for=" item in pedido.items"
-                    :key="item.id">
-
-                    <td >1</td>
-                    <td >{{item.cod_produto}}</td>
-                    <td >{{item.nome}}</td>
-                    <td >{{item.quantidade}}</td>
-                    <td >{{item.valor_vendido | moedaReal}}</td>
-                    <td >{{item.quantidade*item.valor_vendido | moedaReal}}</td>
-                    <td> <button 
-                            class="btn btn-danger btn-sm mr-2 float-right" 
-                            title="Deletar">
-                                Excluir
-                        </button>
-                    </td>
-                    </tr>-->
-                   
+                                :item="ped"/> 
                 </tbody>
                 
-        </table>
-              
-
-
-
-
+                </table>
+            
           </div>
+
           <div class="col-12"> <h4 class="float-right pr-5">Total:  {{totalPedido | moedaReal}}</h4></div>
           
-
           <div style="clear:both"></div>            
           
-           <b-button class="mt-lg-2 ml-5 col-lg-4" variant="danger" @click="$router.back()">Aguradar</b-button> 
-           <!--<b-button class="mt-lg-2 col-lg-6" variant="success" @click="adicionar">Finalizar</b-button>-->
-           <router-link :to="`/pedidorota/1/fechar`" @click="adicionar" class="mt-lg-2 mr-5 col-lg-4 btn btn-success float-right">Finalizar</router-link>
+          <b-button class="mt-lg-2 ml-2 col-lg-4" variant="danger" @click="$router.back()">Aguardar</b-button> 
+         
+          <router-link :to="`/pedidorota/1/fechar`" @click="adicionar" class="mt-lg-2 mr-2 col-lg-4 btn btn-success float-right">Finalizar</router-link>
             
+          <b-form-textarea
+                    class="mt-lg-4"
+                    id="textarea-rows"
+                    placeholder="Observação do Pedido"
+                    rows="3">
+          </b-form-textarea>
        
                
         </div>
@@ -69,10 +52,6 @@
 
 <script>
 
-
-
-
-import EventBus from './../../event-bus'
 import axios from 'axios'
 
 import PedidosVendaItem from '@/components/pedidos/PedidosVendaItem.vue'
@@ -101,6 +80,7 @@ export default {
      },
 
     computed: {
+       
         totalPedido: function () {
             return this.pedido.items.reduce((total , item) => {
             return total + item.quantidade*item.valor_vendido
@@ -116,7 +96,7 @@ export default {
     },
     created() {
      this.getPedidos();
-     this.pedidos = EventBus.pedidos
+    
   
     },
 
@@ -124,12 +104,11 @@ export default {
         async getPedidos() {
 
                 const response = await axios.get(`http://127.0.0.1/pdvsolusoft/blog/public/api/pedidos`);
-                console.log('GET /produtos', response)
                 this.pedidos = response.data;
 
         },
         async deletarItem(item2) {
-            const confirmar = window.confirm(`Deseja deletar a tarefa "${item2.id}"?`)
+            const confirmar = window.confirm(`Deseja deletar o produto "${item2.nome}"?`)
             if (confirmar) {
 
                 try {
@@ -137,7 +116,7 @@ export default {
                     const indice = this.pedido.items.findIndex(i => i.id === item2.id)
                     this.pedido.items.splice(indice, 1)
                 } catch(error) {
-                    console.log('Erro ao deletar Tarefa: ', error)
+                    console.log('Erro ao deletar Produto: ', error)
                 } finally {
                     console.log('Sempre executado!')
                 }

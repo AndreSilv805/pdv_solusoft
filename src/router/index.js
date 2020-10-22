@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-import Home from '../views/Home.vue'
+import Home from '@/views/Home.vue'
 
 import Erro404Produtos from '@/views/produtos/Erro404Produtos.vue'
 import Erro404Clientes from '@/views/clientes/Erro404Clientes.vue'
@@ -77,6 +77,8 @@ const routes = [
       { path: '*', component: Erro404Produtos }
     ] 
   },
+
+
   ///rotas clientes
   { 
     path: '/clientes', component: Clientes,
@@ -110,6 +112,8 @@ const routes = [
       { path: '*', component: Erro404Clientes }
     ] 
   },
+
+
   ///rotas pedidos
   { 
     path: '/pedidos', component: Pedidos,
@@ -132,7 +136,7 @@ const routes = [
           default: extrairParametroId,
           'pedido-detalhes': extrairParametroId
         },
-      }, // produtos.com/contatos/2/editar
+      }, // produtos.com/pedidos/2/editar
 
       {
          path: '', 
