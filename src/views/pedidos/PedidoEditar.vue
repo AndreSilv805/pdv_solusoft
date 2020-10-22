@@ -84,12 +84,11 @@ export default {
         clientes:[],
         pedido:[],
 
+
         pedidoslocal:{ id: null, cod_produto: '', nome: '', valor: 0.00, cores:'', tamanhos:'', quantidade: 0, selecaocores:"", selecaotamanhos:"" },
 
         busca:undefined,
 
-        selecaocores:"",
-        selecaotamanhos:"",
         selecaocliente:"",
          
           }
@@ -131,7 +130,7 @@ export default {
 
     },
     methods: {
-       async getProdutos() {
+        async getProdutos() {
 
                 const response = await axios.get(`http://127.0.0.1/pdvsolusoft/blog/public/api/produtos`);
                 this.produtos = response.data;
@@ -165,11 +164,8 @@ export default {
                 cores:'',
                 tamanhos:'',
                 quantidade: 1
-                },response.data)
-
-            
+                },response.data)            
         },
-
         async adicionarProduto(){
             
            await axios.put(`http://127.0.0.1/pdvsolusoft/blog/public/api/pedidos/${this.id}/add`,this.pedidoslocal);
@@ -191,6 +187,7 @@ export default {
          this.busca = ""
         },
 
+       
        buscar(event) {
          this.busca = event.target.value
   

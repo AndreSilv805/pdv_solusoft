@@ -67,7 +67,7 @@ export default {
     components: {
         ClientesListaItem
     },
-    props: ['clientess','busca'],
+    props: ['busca'],
 
     data() {
         return {

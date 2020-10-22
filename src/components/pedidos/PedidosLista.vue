@@ -18,7 +18,7 @@
             <input 
                 type="search"
                 class="form-control"
-                placeholder="Buscar contatos"
+                placeholder="Buscar Pedidos"
                 @keyup.enter="buscar"
                 :value = "busca">
         </div>

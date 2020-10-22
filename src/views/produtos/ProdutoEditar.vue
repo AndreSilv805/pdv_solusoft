@@ -82,15 +82,7 @@
        </b-form><!--fim criar produto-->
 
     </div>
-     <h3 class="font-weight-light mb-4">Variação dos produtos</h3>
-     <hr>
-
-    
-    <div  v-for="variacao in produto.variations" :key="variacao.id">
-        <h6 class="text-info">{{variacao.nome}}</h6> <hr class="border-info">
-
-        
-    </div>
+     
     </div>
 
 </template>
@@ -114,9 +106,6 @@ export default {
                 cod_produto:'',
                 nome:'',
                 valor:null, 
-                cores: [],
-                tamanhos: [], 
-                variations: [],
             }
         }
     },
