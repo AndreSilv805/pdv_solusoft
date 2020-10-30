@@ -29,16 +29,16 @@
 
         <table class="table">
 
-                <thead class="table table-striped table-sm table-bordered table-dark">
+                <thead style="text-align:center" class="table table-striped table-sm table-bordered table-dark">
                     <tr>
                     <th style="width:15%" scoped="col-2" >Código</th>
                     <th style="width:45%" scoped="col-6">Produto</th>
-                    <th style="width:20%" scoped="col-2">valor</th>
+                    <th style=" width:20%" scoped="col-2">valor</th>
                     <th style="width:20%" scoped="col-2" class="text-align-center">açoes</th>
                     </tr>
                 </thead>
 
-                <tbody class="table table-striped table-bordered">
+                <tbody style="text-align:center" class="table table-striped table-sm table-bordered">
                    
                     <ProdutosListaItem
                                 v-for="prod in produtosFiltrados"

@@ -2,21 +2,27 @@
     
      <tr>
       <td >{{produto.cod_produto}}</td>
-      <td >{{produto.nome}}</td>
-      <td >{{produto.valor | moedaReal }}</td>
-      <td ><router-link 
+      <td style="text-align:left">{{produto.nome}}</td>
+      <td style="text-align:right" >{{produto.valor | moedaReal }}</td>
+      <td >
+
+        <b-button 
+             title="Deletar"
+             size="sm"  
+             variant="danger" 
+             class=" mr-2"
+             @click="$emit('delete', produto)">
+              <b-icon icon="trash" aria-label="Excluir"></b-icon>
+         </b-button>
+          
+          <router-link 
+           title="Editar"
             :to="{ 
                 path: `/produtos/${produto.id}/editar`
             }"
-            class="btn btn-info btn-sm float-right">
-                Detalhes
+            class="btn btn-info btn-sm">
+               <b-icon icon="pencil-square" aria-label="Excluir"></b-icon>
         </router-link>
-         <button 
-            class="btn btn-danger btn-sm mr-2 float-right" 
-            title="Deletar"
-            @click="$emit('delete', produto)">
-                Excluir
-        </button>
         
         </td>
     </tr>

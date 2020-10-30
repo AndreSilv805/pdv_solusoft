@@ -1,26 +1,28 @@
 <template>
      <tr>
       <td >{{cliente.cod_cliente}}</td>
-      <td >{{cliente.nome}}</td>
-      <td>{{cliente.cpf}}</td>
-      <!--<td><the-mask  :mask="['###.###.###-##']" v-model="cliente.cpf" desable/></td>-->
-      <td >{{cliente.sexo}}</td>
+      <td style="text-align:left" >{{cliente.nome}}</td>
+       <!--<td>{{cliente.cpf}}</td>-->
+      <td ><the-mask style="text-align:center"  :mask="['###.###.###-##']" v-model="cliente.cpf" disabled/></td>
       <td >{{cliente.email}}</td>
-      <td ><router-link 
+      <td >
+        <b-button 
+             title="Deletar"
+             size="sm"  
+             variant="danger" 
+             class=" mr-2"
+             @click="$emit('delete', cliente)">
+              <b-icon icon="trash" aria-label="Excluir"></b-icon>
+         </b-button>
+          
+          <router-link 
+           title="Editar"
             :to="{ 
                 path: `/clientes/${cliente.id}/editar`
             }"
-            class="btn btn-info btn-sm float-right">
-                Detalhes
+            class="btn btn-info btn-sm">
+               <b-icon icon="pencil-square" aria-label="Excluir"></b-icon>
         </router-link>
-         <button 
-            class="btn btn-danger btn-sm mr-2 float-right" 
-            title="Deletar"
-            @click="$emit('delete', cliente)">
-                Excluir
-        </button>
-        
-        
      </td>
     </tr>
 
@@ -28,10 +30,10 @@
 
 <script>
 
-//import {TheMask} from 'vue-the-mask'
+import {TheMask} from 'vue-the-mask'
 
 export default {
-    //components: {TheMask},
+    components: {TheMask},
     props: {
         cliente: {
             type: undefined,

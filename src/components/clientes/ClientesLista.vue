@@ -27,18 +27,17 @@
         
         <table class="table">
                 
-                <thead class="table table-striped table-sm table-bordered table-dark">
+                <thead style="text-align:center" class="table table-striped table-sm table-bordered table-dark">
                     <tr >
                     <th scoped="col-2" >Código</th>
                     <th scoped="col-6">Nome</th>
                     <th scoped="col-2">cpf</th>
-                    <th scoped="col-2">sexo</th>
                     <th scoped="col-2">e-mail</th>
                     <th scoped="col-2">açoes</th>
                     </tr>
                 </thead>
 
-                <tbody class="table table-striped table-bordered">
+                <tbody  style="text-align:center" class="table table-striped table-sm table-bordered">
                    
                     <ClientesListaItem
                                 v-for="cli in clientesFiltrados"

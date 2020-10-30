@@ -6,6 +6,7 @@
 
 <script>
 
+
 import PedidosLista from './../../components/pedidos/PedidosLista.vue'
 
 
@@ -16,6 +17,8 @@ export default {
     },
       
     props: ['busca'], //essa prop é recebida pelo router
+
+    
         
 }
 </script>

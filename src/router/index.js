@@ -141,7 +141,7 @@ const routes = [
       {
          path: '', 
          component: PedidosHome, 
-         name: 'pedidos',
+         name: 'Pedidos',
          props: (route) => {
           const busca = route.query.busca
           return busca ? { busca } : {}

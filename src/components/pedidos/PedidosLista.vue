@@ -29,16 +29,16 @@
 
         <table class="table">
 
-                <thead class="table table-striped table-sm table-bordered table-dark">
+                <thead style="text-align:center" class="table table-striped table-sm table-bordered table-dark">
                     <tr>
                     <th style="width:15%" scoped="col-2" >Código</th>
-                    <th style="width:45%" scoped="col-6">Data Pedido</th>
-                    <th style="width:20%" scoped="col-2">Observação</th>
+                    <th style="width:20%" scoped="col-6" >Data Pedido</th>
+                    <th style="width:45%" scoped="col-2">Observação</th>
                     <th style="width:20%" scoped="col-2" class="text-align-center">açoes</th>
                     </tr>
                 </thead>
 
-                <tbody class="table table-striped table-bordered">
+                <tbody style="text-align:center" class="table table-striped table-sm table-bordered">
                    
                     <PedidosListaItem
                                 v-for="ped in pedidosFiltrados"
@@ -73,7 +73,7 @@ export default {
         PedidosListaItem,
     },
 
-    props: ['busca','pedidoss'],
+    props: ['busca'],
 
     data() {
         return {
@@ -86,7 +86,8 @@ export default {
             const busca = this.busca
             return !busca
                 ? this.pedidos
-                : this.pedidos.filter(p => p.observacao.toLowerCase().includes(busca.toLowerCase()))
+                : this.pedidos.filter(m => m.id == busca)
+                
         }
 
     },
@@ -114,7 +115,7 @@ export default {
                 } catch(error) {
                     console.log('Erro ao deletar Pedido: ', error)
                 } finally {
-                    console.log('Sempre executado!')
+                    this.getPedidos();
                 }
 
             }

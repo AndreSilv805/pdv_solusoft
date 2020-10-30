@@ -1,5 +1,5 @@
 <template>
-    <div style="height:600px" class=" col-sm-12 col-lg-8 float-left">
+    <div >
           
           
           <div id="listgroup-ex" style="position:relative;  overflow-y:auto; height:425px">
@@ -7,7 +7,7 @@
 
                 <table class="table">
                 
-                <thead class="table table-striped table-bordered table-dark">
+                <thead style="text-align:center" class="table table-sm table-striped table-bordered table-dark">
                     <tr >
                     <th style="width:5%" scoped="col" >item</th>
                     <th style="width:5%" scoped="col">código</th>
@@ -21,10 +21,11 @@
 
                 <tbody class="table table-striped table-sm table-bordered">  
                    <PedidosVendaItem
-                                v-for="ped in pedido.items"
+                                v-for="(ped, index) in pedido.items"
                                 @delete="deletarItem"
                                 :key="ped.id"
-                                :item="ped"/> 
+                                :item="ped"
+                                :seq="index"/> 
                 </tbody>
                 
                 </table>
@@ -35,16 +36,17 @@
           
           <div style="clear:both"></div>            
           
-          <b-button class="mt-lg-2 ml-2 col-lg-4" variant="danger" @click="$router.back()">Aguardar</b-button> 
+          <!--<b-button class="mt-lg-2 ml-lg-2 col-lg-4" variant="danger" @click="$router.back()">Aguardar</b-button> 
          
-          <router-link :to="`/pedidorota/1/fechar`" @click="adicionar" class="mt-lg-2 mr-2 col-lg-4 btn btn-success float-right">Finalizar</router-link>
+          <router-link class="mt-lg-2 mr-lg-2 col-lg-4 btn btn-success float-right" :to="`/pedidorota/1/fechar`" @click="adicionar" >Finalizar</router-link>
             
-          <b-form-textarea
+           <b-form-textarea
                     class="mt-lg-4"
+                    v-model="pedido.obeservacao"
                     id="textarea-rows"
                     placeholder="Observação do Pedido"
                     rows="3">
-          </b-form-textarea>
+          </b-form-textarea>-->
        
                
         </div>
@@ -86,6 +88,7 @@ export default {
             return total + item.quantidade*item.valor_vendido
             },0)
         },
+        
         pedidosFiltrados() {
             const busca = this.busca
             return !busca
@@ -123,6 +126,7 @@ export default {
 
             }
         },
+        
         buscar(event) {
             this.$router.push({
                 path: '/pedidos',
