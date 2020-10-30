@@ -1,24 +1,25 @@
-# pdv_universo
+# Frontend Sistema de Vendas
 
-## Project setup
-```
-npm install
-```
+Com cadastro de clientes, produtos, cadastro de vendas, geração de comprovante de vendas.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+Fontend para consumir Api em laravel.
 
-### Compiles and minifies for production
+Para instalar esta aplicação.
+
+ 1. git clone https://github.com/AndreSilv805/pdv_solusoft.git
+ 2. Depois de baixado dentro da pasta use o comando npm install 
+ 3. Para rodar o projeto: npm run serve
+
+## Funcionalidades
+
+* Cadastro de produtos
+* Cadastro de cliente
+* Gerador de Pedido de Venda
+* Comprovante de venda
+* Envio de email comprovante de venda
+
+### Comando para compilar e minificar arquivos para produção
 ```
 npm run build
 ```
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
