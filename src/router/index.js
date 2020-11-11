@@ -46,10 +46,7 @@ const routes = [
   ////rotas produtos  
   { 
     path: '/produtos', component: Produtos, 
-    props: (route) => {
-      const busca = route.query.busca
-      return busca ? { busca } : {}
-    },
+    
 
     children: [
 
@@ -69,10 +66,7 @@ const routes = [
          path: '', 
          component: ProdutosHome, 
          name: 'produtos',
-         props: (route) => {
-          const busca = route.query.busca
-          return busca ? { busca } : {}
-         },
+        
       },
       { path: '*', component: Erro404Produtos }
     ] 
@@ -82,11 +76,7 @@ const routes = [
   ///rotas clientes
   { 
     path: '/clientes', component: Clientes,
-    props: (route) => {
-      const busca = route.query.busca
-      return busca ? { busca } : {}
-    },
-
+    
     children: [
       { path: ':id(\\d+)/editar', alias: ':id(\\d+)/alterar', 
          components: {
@@ -104,10 +94,6 @@ const routes = [
          path: '', 
          component: ClientesHome, 
          name: 'Clientes',
-         props: (route) => {
-          const busca = route.query.busca
-          return busca ? { busca } : {}
-         },
       },
       { path: '*', component: Erro404Clientes }
     ] 
@@ -117,10 +103,6 @@ const routes = [
   ///rotas pedidos
   { 
     path: '/pedidos', component: Pedidos,
-    props: (route) => {
-      const busca = route.query.busca
-      return busca ? { busca } : {}
-    },
 
     children: [
       { path: ':id(\\d+)', component: PedidoDetalhes, name: 'pedido', props: extrairParametroId,
@@ -142,10 +124,7 @@ const routes = [
          path: '', 
          component: PedidosHome, 
          name: 'Pedidos',
-         props: (route) => {
-          const busca = route.query.busca
-          return busca ? { busca } : {}
-         },
+    
       },
       { path: '*', component: Erro404Pedidos }
     ] 

@@ -125,7 +125,7 @@ export default {
   methods:{
          criarProduto() {
             
-            axios.put(`http://127.0.0.1/pdvsolusoft/blog/public/api/produtos/${this.id}`,this.produto)
+            axios.put(`produtos/${this.id}`,this.produto)
                 .then((response) => {
                     console.log('Produto criado com sucesso', response)
                 })
@@ -133,12 +133,12 @@ export default {
             },
 
         async editarProduto(){
-            const response = await axios.put(`http://127.0.0.1/pdvsolusoft/blog/public/api/produtos/${this.id}`,this.produto);
+            const response = await axios.put(`produtos/${this.id}`,this.produto);
             this.produto = response.data;
         },
 
         async pegarProduto(){
-            const response = await axios.get(`http://127.0.0.1/pdvsolusoft/blog/public/api/produtos/${this.id}`);
+            const response = await axios.get(`produtos/${this.id}`);
             this.produto = response.data;
         },
     }

@@ -62,7 +62,6 @@
 
        </b-form>
 
-    {{cliente}}
     </div>
 </template>
 
@@ -106,13 +105,13 @@ export default {
     methods:{
         async editarCliente(){
 
-            const response = await axios.put(`http://127.0.0.1/pdvsolusoft/blog/public/api/clientes/${this.id}`,this.cliente);
+            const response = await axios.put(`clientes/${this.id}`,this.cliente);
             console.log('GET /cliente', response)
             this.cliente = response.data;
         },
         async pegarCliente(){
 
-            const response = await axios.get(`http://127.0.0.1/pdvsolusoft/blog/public/api/clientes/${this.id}`);
+            const response = await axios.get(`clientes/${this.id}`);
             console.log('GET /cliente', response)
             this.cliente = response.data;
         },

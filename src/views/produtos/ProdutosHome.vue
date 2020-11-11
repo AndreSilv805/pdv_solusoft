@@ -1,6 +1,6 @@
 <template>
     <div class="container mt-5">
-    <ProdutosLista  :busca="busca" />
+    <ProdutosLista />
     </div>
 </template>
 
@@ -14,7 +14,5 @@ export default {
         ProdutosLista
     },
 
-    props: ['busca'], 
-     
 }
 </script>

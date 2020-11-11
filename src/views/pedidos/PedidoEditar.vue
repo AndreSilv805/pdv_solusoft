@@ -157,19 +157,19 @@ export default {
     methods: {
         async getProdutos() {
 
-                const response = await axios.get(`http://127.0.0.1/pdvsolusoft/blog/public/api/produtos`);
+                const response = await axios.get(`produtos`);
                 this.produtos = response.data;
 
         },
          async getClientes() {
 
-                const response = await axios.get(`http://127.0.0.1/pdvsolusoft/blog/public/api/clientes`);
+                const response = await axios.get(`clientes`);
                 this.clientes = response.data;
 
         },
          async getPedido() {
 
-                const response = await axios.get(`http://127.0.0.1/pdvsolusoft/blog/public/api/pedidos/${this.id}`);
+                const response = await axios.get(`pedidos/${this.id}`);
                 this.pedido = response.data;
 
         },
@@ -177,7 +177,7 @@ export default {
 
             this.busca = event.target.value
 
-            const response = await axios.get(`http://127.0.0.1/pdvsolusoft/blog/public/api/produtos/${this.busca}`);
+            const response = await axios.get(`produtos/${this.busca}`);
 
             this.pedidoslocal = Object.assign({},{ 
                 id: null, 
@@ -193,9 +193,9 @@ export default {
           
           this.editarPedido();
             
-           await axios.put(`http://127.0.0.1/pdvsolusoft/blog/public/api/pedidos/${this.id}/add`,this.pedidoslocal);
+           await axios.put(`pedidos/${this.id}/add`,this.pedidoslocal);
             
-            const response = await axios.get(`http://127.0.0.1/pdvsolusoft/blog/public/api/pedidos/${this.id}`);
+            const response = await axios.get(`pedidos/${this.id}`);
             this.pedido = response.data;
             
           this.pedidoslocal = { 
@@ -215,7 +215,7 @@ export default {
         async fecharPedido(){
 
           this.editarPedido();
-          await axios.get(`http://127.0.0.1/pdvsolusoft/blog/public/api/pedidos/email/${this.id}`);
+          await axios.get(`pedidos/email/${this.id}`);
           this.$router.push('/pedidos');
          
         
@@ -223,7 +223,7 @@ export default {
 
         async editarPedido(){
             
-           await axios.put(`http://127.0.0.1/pdvsolusoft/blog/public/api/pedidos/${this.id}`,this.pedido);
+           await axios.put(`pedidos/${this.id}`,this.pedido);
             
         },
 

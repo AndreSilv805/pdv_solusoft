@@ -14,19 +14,43 @@
             </div>
         </div>
 
-        <div class="form-group mt-2">
+        <!--<div class="form-group mt-2">
             <input 
                 type="search"
                 class="form-control"
                 placeholder="Buscar produtos"
                 @keyup.enter="buscar"
                 :value = "busca">
-        </div>
+        </div>-->
+            <hr>
+            <div class="form-row mt-4">
+                <div class="col-3">
+                <input type="search" class="form-control" placeholder="Código" v-model="parametros.cod_produto" @keyup.enter="getProdutos">
+                </div>
 
-        <hr>
+                <div class="col-4">
+                <input type="search" class="form-control" placeholder="Nome do Produto" v-model="parametros.nome" @keyup.enter="getProdutos">
+                </div>
 
-       
+                <div class="col-4 pr-3">
+                <input type="search"  class="form-control" placeholder="valor" v-model="parametros.valor" @keyup.enter="getProdutos">
+                </div>
 
+                <div class="col-1">
+                    <button type="" @click='getProdutos' class="btn btn-info float-right">Pesquisar</button>
+                </div>
+            </div>
+            <hr>
+
+        <!--<b-alert
+            :show="dismissCountDown"
+            dismissible
+            :variant="mensagem.tipo"
+            @dismiss-count-down="countDownChanged"
+        >
+            {{mensagem.texto}}
+        </b-alert>-->
+      
         <table class="table">
 
                 <thead style="text-align:center" class="table table-striped table-sm table-bordered table-dark">
@@ -41,7 +65,7 @@
                 <tbody style="text-align:center" class="table table-striped table-sm table-bordered">
                    
                     <ProdutosListaItem
-                                v-for="prod in produtosFiltrados"
+                                v-for="prod in produtos"
                                 @delete="deletarTarefa"
                                 :key="prod.id"
                                 :produto="prod"/>
@@ -49,12 +73,16 @@
                 </tbody>
                 
         </table>
+
+        <div class="mt-3">
+            <b-pagination v-model="currentPage" :total-rows="meta.total" :per-page="meta.per_page" align="center">
+                <template  #page="{ page, active }">
+                    <b v-if="active"><span class="bg-gradient-warning">{{ page }}</span></b>
+                    <i v-else><span class="text-info">{{ page }}</span></i>
+                </template>
+            </b-pagination> 
+        </div>
      
-
-
-
-
-        <button class="btn btn-secondary mt-4 mb-4" @click="voltar">Voltar</button>
     </div>
 </template>
 
@@ -73,20 +101,27 @@ export default {
         ProdutosListaItem,
     },
 
-    props: ['busca'],
-
     data() {
         return {
-            produtos: [],  
+            /* mensagem:{
+                texto:'yes',
+                tipo:'danger'
+            },
+            dismissCountDown:10, //temporizador em segundo alert*/
+            produtos:[],
+            meta: [],
+            currentPage: 1,
+            parametros:{
+                cod_produto:this.$route.query.cod_produto,
+                nome:this.$route.query.nome,
+                valor:this.$route.query.valor,
+            }   
         }
     },
 
-    computed: {
-        produtosFiltrados() {
-            const busca = this.busca
-            return !busca
-                ? this.produtos
-                : this.produtos.filter(p => p.nome.toLowerCase().includes(busca.toLowerCase()))
+    watch: {
+        currentPage(){
+            this.getProdutos();
         }
     },
 
@@ -97,8 +132,9 @@ export default {
     methods: {
         async getProdutos() {
 
-                const response = await axios.get(`http://127.0.0.1/pdvsolusoft/blog/public/api/produtos`);
-                this.produtos = response.data;
+                const response = await axios.get(`produtos-search?page=`+this.currentPage,{params:this.parametros});
+                this.produtos = response.data.data;
+                this.meta = response.data;
 
         },
         async deletarTarefa(produto) {
@@ -106,7 +142,7 @@ export default {
             if (confirmar) {
 
                 try {
-                    await axios.delete(`http://127.0.0.1/pdvsolusoft/blog/public/api/produtos/${produto.id}`)
+                    await axios.delete(`produtos/${produto.id}`)
                 } catch(error) {
                     console.log('Erro ao deletar Tarefa: ', error)
                 } finally {
@@ -115,15 +151,10 @@ export default {
 
             }
         },
-        buscar(event) {
-            this.$router.push({
-                path: '/produtos',
-                query: { busca: event.target.value }
-            })
-        },
-        voltar() {
-            this.$router.back()
-        },
+        /*countDownChanged(dismissCountDown) {
+        this.dismissCountDown = dismissCountDown
+        },*/
+        
     }
 }
 </script>

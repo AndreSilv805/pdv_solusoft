@@ -91,7 +91,7 @@ export default {
     data() {
          return {
         
-            mensagemErro: undefined,
+            mensagem:'teste de envio',
              produto: {
                 cod_produto:'',
                 nome: '',
@@ -103,12 +103,20 @@ export default {
     
          }
     },
+
+     /*beforeRouteLeave(to, from, next) {
+        next(vm => {
+            vm.ProdutosLista.getProdutos();
+        })
+    },*/
+
     methods: {
     criarProduto() {
             
-            axios.post(`http://127.0.0.1/pdvsolusoft/blog/public/api/produtos`,this.produto)
+            axios.post(`produtos`,this.produto)
                 .then((response) => {
-                    console.log('Produto criado com sucesso', response)
+                    console.log('Produto criado com sucesso', response);
+                    this.mensagem = "Produto criado com sucesso";
                 })
 
                 this.$router.push('/produtos')

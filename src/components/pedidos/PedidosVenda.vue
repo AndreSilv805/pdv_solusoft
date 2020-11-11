@@ -106,7 +106,7 @@ export default {
     methods: {
         async getPedidos() {
 
-                const response = await axios.get(`http://127.0.0.1/pdvsolusoft/blog/public/api/pedidos`);
+                const response = await axios.get(`pedidos`);
                 this.pedidos = response.data;
 
         },
@@ -115,7 +115,7 @@ export default {
             if (confirmar) {
 
                 try {
-                    await axios.delete(`http://127.0.0.1/pdvsolusoft/blog/public/api/pedidos/remover/${item2.id}`)
+                    await axios.delete(`pedidos/remover/${item2.id}`)
                     const indice = this.pedido.items.findIndex(i => i.id === item2.id)
                     this.pedido.items.splice(indice, 1)
                 } catch(error) {

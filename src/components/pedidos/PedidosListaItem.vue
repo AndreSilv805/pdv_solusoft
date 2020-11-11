@@ -2,7 +2,7 @@
     
      <tr>
       <td  >{{pedido.id}}</td>
-      <td >{{pedido.created_at}}</td>
+      <td >{{pedido.created_at | dataBr}}</td>
       <td style="text-align:left" >{{pedido.obeservacao}}</td>
       <td >
            <b-button 
@@ -22,14 +22,7 @@
             class="btn btn-info btn-sm">
                <b-icon icon="pencil-square" aria-label="Excluir"></b-icon>
         </router-link>
-        <!-- <button 
-            class="btn btn-danger btn-sm mr-2 float-right" 
-            title="Deletar"
-            @click="$emit('delete', pedido)">
-                Excluir
-        </button>
-        pencil-square-->
-         
+      
         </td>
     </tr>
 
@@ -43,6 +36,13 @@ export default {
             required: true
         }
     },
+    filters: {
+        dataBr (value) {
+        let data = new Date(value);
+        let dataFormatada = ((data.getDate())) + "/" + ((data.getMonth() + 1)) + "/" + data.getFullYear(); 
+        return dataFormatada
+        }
+     },
 }
 </script>
 

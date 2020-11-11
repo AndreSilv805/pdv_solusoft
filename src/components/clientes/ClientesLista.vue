@@ -13,15 +13,35 @@
             </div>
         </div>
 
-        <div class="form-group mt-2">
+        <!--<div class="form-group mt-2">
             <input 
                 type="search"
                 class="form-control"
                 placeholder="Buscar Clientes"
-                @keyup.enter="buscar"
-                :value = "busca">
-        </div>
 
+                @keyup.enter="buscar"
+
+                :value = "busca">
+        </div>-->
+
+          <hr>
+            <div class="form-row mt-4">
+                <div class="col-3">
+                <input type="search" class="form-control" placeholder="Código" v-model="parametros.cod_cliente" @keyup.enter="getClientes">
+                </div>
+
+                <div class="col-4">
+                <input type="search" class="form-control" placeholder="nome" v-model="parametros.nome" @keyup.enter="getClientes">
+                </div>
+
+                <div class="col-4 pr-3">
+                <the-mask type="search"  class="form-control"  placeholder="cpf" :mask="['###.###.###-##']" v-model="parametros.cpf" @keyup.enter="getClientes"/>
+                </div>
+
+                <div class="col-1">
+                    <button type="" @click='getClientes' class="btn btn-info float-right">Pesquisar</button>
+                </div>
+            </div>
         <hr>
 
         
@@ -40,7 +60,7 @@
                 <tbody  style="text-align:center" class="table table-striped table-sm table-bordered">
                    
                     <ClientesListaItem
-                                v-for="cli in clientesFiltrados"
+                                v-for="cli in clientes"
                                 @delete="deletarCliente"
                                 :key="cli.id"
                                 :cliente="cli"/>
@@ -49,8 +69,15 @@
                 
         </table>
 
+        <div class="mt-3">
+            <b-pagination v-model="currentPage" :total-rows="meta.total" :per-page="meta.per_page" align="center">
+                <template  #page="{ page, active }">
+                    <b v-if="active"><span class="bg-gradient-warning">{{ page }}</span></b>
+                    <i v-else><span class="text-info">{{ page }}</span></i>
+                </template>
+            </b-pagination> 
+        </div>
 
-        <button class="btn btn-secondary mt-4 mb-4" @click="voltar">Voltar</button>
     </div>
 
 </template>
@@ -61,40 +88,46 @@ import ClientesListaItem from '@/components/clientes/ClientesListaItem.vue'
 
 
 import axios from 'axios'
+import {TheMask} from 'vue-the-mask'
 
 export default {
     components: {
-        ClientesListaItem
+        ClientesListaItem,
+        TheMask
     },
-    props: ['busca'],
 
     data() {
         return {
-            clientes: []
+            clientes: [],
+            meta: [],
+            currentPage: 1,
+            parametros:{
+                cod_cliente:this.$route.query.cod_cliente,
+                nome:this.$route.query.nome,
+                cpf:this.$route.query.cpf
+            } 
         }
     },
 
-    computed: {
-        clientesFiltrados() {
-            const busca = this.busca
-            return !busca
-                ? this.clientes
-                : this.clientes.filter(c => c.nome.toLowerCase().includes(busca.toLowerCase()))
+     watch: {
+        currentPage(){
+            this.getClientes();
         }
-
     },
+
     created() {
      this.getClientes();
-     
-  
     },
+
     methods: {
         async getClientes() {
 
-                const response = await axios.get(`http://127.0.0.1/pdvsolusoft/blog/public/api/clientes`);
-                this.clientes = response.data;
+                const response = await axios.get(`http://127.0.0.1/pdvsolusoft/blog/public/api/clientes-search?page=`+this.currentPage,{params:this.parametros});
+                this.clientes = response.data.data;
+                this.meta = response.data;
 
         },
+
         async deletarCliente(cliente) {
             const confirmar = window.confirm(`Deseja deletar cliente: "${cliente.nome}"?`)
             if (confirmar) {
@@ -109,15 +142,12 @@ export default {
             }
         },
 
-        buscar(event) {
+        /*buscar(event) {
             this.$router.push({
                 path: '/clientes',
                 query: { busca: event.target.value }
             })
-        },
-        voltar() {
-            this.$router.back()
-        }
+        },*/
     }
 }
 </script>

@@ -14,21 +14,41 @@
             </div>
         </div>
 
-        <div class="form-group mt-2">
-            <input 
-                type="search"
-                class="form-control"
-                placeholder="Buscar Pedidos"
-                @keyup.enter="buscar"
-                :value = "busca">
-        </div>
+        <hr>
+
+     
+            <div class="form-row mt-4">
+                <div class="col-3">
+                <input type="search" class="form-control" placeholder="Código" v-model="parametros.id" @keyup.enter="getPedidos">
+                </div>
+
+                <div class="col-4">
+                <input type="search" class="form-control" placeholder="Oberservação" v-model ="parametros.obeservacao" @keyup.enter="getPedidos">
+                </div>
+
+                <div class="col-4 pr-3">
+                <input type="date"  class="form-control" placeholder="Data" v-model="parametros.created_at" @keyup.enter="getPedidos">
+                </div>
+
+                <div class="col-1">
+                    <button type="" @click='getPedidos' class="btn btn-info float-right">Pesquisar</button>
+                </div>
+            </div>
+    
 
         <hr>
 
-       
+        <b-alert
+            :show="dismissCountDown"
+            dismissible
+            :variant="mensagem.tipo"
+            @dismiss-count-down="countDownChanged"
+        >
+            {{mensagem.texto}}
+        </b-alert>
 
+    
         <table class="table">
-
                 <thead style="text-align:center" class="table table-striped table-sm table-bordered table-dark">
                     <tr>
                     <th style="width:15%" scoped="col-2" >Código</th>
@@ -38,23 +58,25 @@
                     </tr>
                 </thead>
 
-                <tbody style="text-align:center" class="table table-striped table-sm table-bordered">
-                   
+                <tbody  style="text-align:center" class="table table-striped table-sm table-bordered"> 
                     <PedidosListaItem
-                                v-for="ped in pedidosFiltrados"
-                                @delete="deletarPedido"
+                                v-for="ped in pedidos"
+                                @delete="deletarPedido" 
                                 :key="ped.id"
-                                :pedido="ped"/>
-                   
-                </tbody>
-                
+                                :pedido="ped"/>   
+                </tbody>        
         </table>
-     
+               
+    <div class="mt-3">
+      <b-pagination v-model="currentPage" :total-rows="meta.total" :per-page="meta.per_page" align="center">
+           <template  #page="{ page, active }">
+              <b v-if="active"><span class="bg-gradient-warning">{{ page }}</span></b>
+              <i v-else><span class="text-info">{{ page }}</span></i>
+           </template>
+      </b-pagination> 
+    </div>
 
-
-
-
-        <button class="btn btn-secondary mt-4 mb-4" @click="voltar">Voltar</button>
+      
     </div>
 </template>
 
@@ -73,24 +95,36 @@ export default {
         PedidosListaItem,
     },
 
-    props: ['busca'],
-
     data() {
         return {
+            mensagem:{
+                texto:'',
+                tipo:''
+            },
             pedidos: [],
+            meta: [],
+            rows: 7,
+            currentPage: 1,
+            perPage: 4,
+            parametros:{
+                id:this.$route.query.id,
+                obeservacao:this.$route.query.obeservacao,
+                created_at:this.$route.query.created_at
+            },
+            dismissCountDown: 0 //temporizador em segundo alert
         }
     },
 
-    computed: {
-        pedidosFiltrados() {
-            const busca = this.busca
-            return !busca
-                ? this.pedidos
-                : this.pedidos.filter(m => m.id == busca)
-                
+    watch: {
+        currentPage(){
+            this.getPedidos();
         }
-
     },
+
+    /*beforeRouteUpdate(to, from, next) {
+            this.parametros.id = to.query.id
+            next()
+    },*/
     
     created() {
      this.getPedidos();
@@ -100,20 +134,54 @@ export default {
     methods: {
         async getPedidos() {
 
-                const response = await axios.get(`http://127.0.0.1/pdvsolusoft/blog/public/api/pedidos`);
-                this.pedidos = response.data;
+                try {
+                    const response = await axios.get(`pedidos-search?page=`+this.currentPage,{params:this.parametros});
+                    this.pedidos = response.data.data;
+                    this.meta = response.data;
+                    
+                    this.$router.push({
+                    path: '/pedidos',
+                    query: this.parametros 
+                    })
+                } catch(error) {
+                    this.mensagem.tipo = "danger";
+                    this.dismissCountDown = 10;
+                    
+                     if (error.response) {
+                        this.mensagem.texto = `Erro ao listar Pedidos - Servidor retornou um erro: ${error.message} ${error.response.statusText}`;
+                        this.mensagem.tipo = "danger"
+                    } else if (error.request) {
+                        this.mensagem.texto = `Erro ao tentar comunicar com o servidor: ${error.message}`;
+                        this.mensagem.tipo = "danger"
+                    } else {
+                        this.mensagem.texto = `Erro ao fazer requisição ao servidor: ${error.message}`;
+                        this.mensagem.tipo = "danger"
+                    }
+                }
 
         },
+
         async deletarPedido(pedido) {
             const confirmar = window.confirm(`Deseja deletar Pedido "${pedido.id}"?`)
             if (confirmar) {
 
                 try {
-                    await axios.delete(`http://127.0.0.1/pdvsolusoft/blog/public/api/pedidos/${pedido.id}`)
-                    const indice = this.pedidos.findIndex(p => p.id === pedido.id)
-                    this.pedidos.splice(indice, 1)
+                    await axios.delete(`pedidos/${pedido.id}`);
+                    this.mensagem.texto = 'Produto excluido com sucesso';
+                    this.mensagem.tipo = "success"
+                    this.dismissCountDown = 10;
+
                 } catch(error) {
-                    console.log('Erro ao deletar Pedido: ', error)
+                     this.mensagem.tipo = "danger";
+                     this.dismissCountDown = 10;
+                     if (error.response) {
+                        this.mensagem.texto = `Não possivel excluir Pedido - Servidor retornou um erro: ${error.message} ${error.response.statusText}`;   
+                    } else if (error.request) {
+                        this.mensagem.texto = `Erro ao tentar comunicar com o servidor: ${error.message}`;
+                    } else {
+                        this.mensagem.texto = `Erro ao fazer requisição ao servidor: ${error.message}`;   
+                    }
+
                 } finally {
                     this.getPedidos();
                 }
@@ -122,19 +190,14 @@ export default {
         },
 
         async criarPedido() {
-            const response = await axios.post(`http://127.0.0.1/pdvsolusoft/blog/public/api/pedidos`);
+            const response = await axios.post(`pedidos`);
             this.$router.push({ path: `/pedidos/${response.data.id}/editar`})
         },
 
-        buscar(event) {
-            this.$router.push({
-                path: '/pedidos',
-                query: { busca: event.target.value }
-            })
+        countDownChanged(dismissCountDown) {
+        this.dismissCountDown = dismissCountDown
         },
-        voltar() {
-            this.$router.back()
-        },
+    
     }
 }
 </script>

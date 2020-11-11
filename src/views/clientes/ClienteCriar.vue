@@ -91,10 +91,15 @@ export default {
     
          }
     },
+    beforeRouteLeave(to, from, next) {
+        next(vm => {
+            vm.ClientesLista.getClientes();
+        })
+    },
     methods: {
     criarCliente() {
             
-            axios.post(`http://127.0.0.1/pdvsolusoft/blog/public/api/clientes`,this.cliente)
+            axios.post(`clientes`,this.cliente)
                 .then((response) => {
                     console.log('Cadastro criado com sucesso', response)
                 })
