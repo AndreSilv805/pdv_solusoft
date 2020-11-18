@@ -167,13 +167,13 @@ export default {
 
                 try {
                     await axios.delete(`pedidos/${pedido.id}`);
-                    this.mensagem.texto = 'Produto excluido com sucesso';
+                    this.mensagem.texto = 'Pedido excluido com sucesso';
                     this.mensagem.tipo = "success"
                     this.dismissCountDown = 10;
 
                 } catch(error) {
                      this.mensagem.tipo = "danger";
-                     this.dismissCountDown = 10;
+                     this.dismissCountDown = 20;
                      if (error.response) {
                         this.mensagem.texto = `Não possivel excluir Pedido - Servidor retornou um erro: ${error.message} ${error.response.statusText}`;   
                     } else if (error.request) {

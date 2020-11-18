@@ -49,7 +49,7 @@ const routes = [
     
     children: [
 
-      { path: ':id(\\d+)/editar', alias: ':id(\\d+)/alterar', components: ProdutoEditar, props: extrairParametroId
+      { path: ':id(\\d+)/editar', alias: ':id(\\d+)/alterar', component: ProdutoEditar, props: extrairParametroId
       }, // produtos.com/produtos/2/editar
 
       { path: 'criar', component: ProdutoCriar, name: 'produtocriar'
@@ -67,7 +67,7 @@ const routes = [
     path: '/clientes', component: Clientes,
     
     children: [
-      { path: ':id(\\d+)/editar', components: ClienteEditar, props: extrairParametroId
+      { path: ':id(\\d+)/editar', component: ClienteEditar, props: extrairParametroId
       }, // produtos.com/clientes/2/editar
 
       { path: 'criar', component: ClienteCriar, name: 'clientecriar'

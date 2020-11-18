@@ -70,7 +70,7 @@
 
           
           <b-button class="mt-lg-2 ml-lg-2 col-lg-3  float-right" variant="success" @click="fecharPedido">Finalizar</b-button> 
-          <b-button class="mt-lg-2 mb-4 mt-2 ml-lg-2 col-lg-3 float-right" variant="danger" @click="$router.back()">Aguardar</b-button> 
+          <b-button class="mt-lg-2 mb-4 mt-2 ml-lg-2 col-lg-3 float-right" variant="danger" @click="aguardarPedido">Aguardar</b-button> 
           
         
          <b-form-textarea
@@ -218,12 +218,19 @@ export default {
           await axios.get(`pedidos/email/${this.id}`);
           this.$router.push('/pedidos');
          
-        
+        },
+
+         aguardarPedido(){
+
+          this.editarPedido();
+          this.$router.push('/pedidos');
+         
         },
 
         async editarPedido(){
             
            await axios.put(`pedidos/${this.id}`,this.pedido);
+           
             
         },
 

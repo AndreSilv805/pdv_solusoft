@@ -14,7 +14,7 @@
         </div>
 
         <hr>
-    <b-form @submit="criarCliente"><!--formulário criar produto-->
+    <b-form @submit.prevent="criarCliente"><!--formulário criar produto-->
 
       <b-form-group id="input-group-1" label="Cliente" label-for="input-cliente">
         <b-form-input
@@ -91,20 +91,15 @@ export default {
     
          }
     },
-    beforeRouteLeave(to, from, next) {
-        next(vm => {
-            vm.ClientesLista.getClientes();
-        })
-    },
     methods: {
     criarCliente() {
             
             axios.post(`clientes`,this.cliente)
                 .then((response) => {
-                    console.log('Cadastro criado com sucesso', response)
+                    console.log('Cadastro criado com sucesso', response);
+                    this.$router.push('/clientes')
                 })
 
-                this.$router.push('/clientes')
             },
             
     },

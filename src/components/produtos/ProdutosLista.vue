@@ -14,14 +14,6 @@
             </div>
         </div>
 
-        <!--<div class="form-group mt-2">
-            <input 
-                type="search"
-                class="form-control"
-                placeholder="Buscar produtos"
-                @keyup.enter="buscar"
-                :value = "busca">
-        </div>-->
             <hr>
             <div class="form-row mt-4">
                 <div class="col-3">
@@ -42,14 +34,14 @@
             </div>
             <hr>
 
-        <!--<b-alert
+        <b-alert
             :show="dismissCountDown"
             dismissible
             :variant="mensagem.tipo"
             @dismiss-count-down="countDownChanged"
         >
             {{mensagem.texto}}
-        </b-alert>-->
+        </b-alert>
       
         <table class="table">
 
@@ -103,11 +95,11 @@ export default {
 
     data() {
         return {
-            /* mensagem:{
-                texto:'yes',
-                tipo:'danger'
+            mensagem:{
+                texto:'',
+                tipo:''
             },
-            dismissCountDown:10, //temporizador em segundo alert*/
+            dismissCountDown:0, //temporizador em segundo alert*/
             produtos:[],
             meta: [],
             currentPage: 1,
@@ -143,6 +135,9 @@ export default {
 
                 try {
                     await axios.delete(`produtos/${produto.id}`)
+                    this.mensagem.texto = 'Produto excluido com sucesso';
+                    this.mensagem.tipo = "success"
+                    this.dismissCountDown = 10;
                 } catch(error) {
                     console.log('Erro ao deletar Tarefa: ', error)
                 } finally {
@@ -151,9 +146,9 @@ export default {
 
             }
         },
-        /*countDownChanged(dismissCountDown) {
+        countDownChanged(dismissCountDown) {
         this.dismissCountDown = dismissCountDown
-        },*/
+        },
         
     }
 }

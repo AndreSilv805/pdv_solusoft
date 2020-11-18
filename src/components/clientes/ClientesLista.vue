@@ -13,17 +13,6 @@
             </div>
         </div>
 
-        <!--<div class="form-group mt-2">
-            <input 
-                type="search"
-                class="form-control"
-                placeholder="Buscar Clientes"
-
-                @keyup.enter="buscar"
-
-                :value = "busca">
-        </div>-->
-
           <hr>
             <div class="form-row mt-4">
                 <div class="col-3">
@@ -44,7 +33,15 @@
             </div>
         <hr>
 
-        
+        <b-alert
+            :show="dismissCountDown"
+            dismissible
+            :variant="mensagem.tipo"
+            @dismiss-count-down="countDownChanged"
+        >
+            {{mensagem.texto}}
+        </b-alert>
+
         <table class="table">
                 
                 <thead style="text-align:center" class="table table-striped table-sm table-bordered table-dark">
@@ -98,6 +95,11 @@ export default {
 
     data() {
         return {
+            mensagem:{
+                texto:'',
+                tipo:''
+            },
+            dismissCountDown:0, //temporizador em segundo alert*/
             clientes: [],
             meta: [],
             currentPage: 1,
@@ -133,6 +135,9 @@ export default {
             if (confirmar) {
                 try {
                     await axios.delete(`http://127.0.0.1/pdvsolusoft/blog/public/api/clientes/${cliente.id}`);
+                    this.mensagem.texto = 'Cliente excluido com sucesso';
+                    this.mensagem.tipo = "success";
+                    this.dismissCountDown = 10;
       
                 } catch(error) {
                     console.log('Erro ao deletar Cliente: ', error)
@@ -142,12 +147,9 @@ export default {
             }
         },
 
-        /*buscar(event) {
-            this.$router.push({
-                path: '/clientes',
-                query: { busca: event.target.value }
-            })
-        },*/
+        countDownChanged(dismissCountDown) {
+            this.dismissCountDown = dismissCountDown
+        },
     }
 }
 </script>

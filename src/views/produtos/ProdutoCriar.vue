@@ -15,7 +15,7 @@
 
         <hr>
 
-    <b-form @submit="criarProduto"><!--formulário criar produto-->
+    <b-form @submit.prevent="criarProduto"><!--formulário criar produto-->
       <b-form-group
         id="input-group-1"
         label="Produto"
@@ -117,9 +117,10 @@ export default {
                 .then((response) => {
                     console.log('Produto criado com sucesso', response);
                     this.mensagem = "Produto criado com sucesso";
+                    this.$router.push('/produtos')
                 })
 
-                this.$router.push('/produtos')
+                
             },
             
     },
