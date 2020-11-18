@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 
 import Home from '@/views/Home.vue'
 
+import Erro404 from '@/views/Erro404.vue'
 import Erro404Produtos from '@/views/produtos/Erro404Produtos.vue'
 import Erro404Clientes from '@/views/clientes/Erro404Clientes.vue'
 import Erro404Pedidos from '@/views/pedidos/Erro404Pedidos.vue'
@@ -21,7 +22,6 @@ const ClienteCriar = () => import(/* webpackChunkName: "produtos" */ '@/views/cl
 
 const Pedidos = () => import(/* webpackChunkName: "pedidos" */ '@/views/pedidos/Pedidos.vue') 
 const PedidosHome = () => import(/* webpackChunkName: "pedidos" */ '@/views/pedidos/PedidosHome.vue')
-const PedidoDetalhes = () => import(/* webpackChunkName: "pedidos" */ '@/views/pedidos/PedidoDetalhes.vue')
 const PedidoEditar = () => import(/* webpackChunkName: "pedidos" */ '@/views/pedidos/PedidoEditar.vue')
 
 
@@ -47,26 +47,15 @@ const routes = [
   { 
     path: '/produtos', component: Produtos, 
     
-
     children: [
 
-      { path: ':id(\\d+)/editar', alias: ':id(\\d+)/alterar', 
-         components: {
-          default: ProdutoEditar,
-        },
-        props: {
-          default: extrairParametroId,
-        },
+      { path: ':id(\\d+)/editar', alias: ':id(\\d+)/alterar', components: ProdutoEditar, props: extrairParametroId
       }, // produtos.com/produtos/2/editar
 
       { path: 'criar', component: ProdutoCriar, name: 'produtocriar'
       }, // produtos.com/produtos/criar
 
-      {
-         path: '', 
-         component: ProdutosHome, 
-         name: 'produtos',
-        
+      {path: '', component: ProdutosHome, name: 'produtos',
       },
       { path: '*', component: Erro404Produtos }
     ] 
@@ -78,23 +67,15 @@ const routes = [
     path: '/clientes', component: Clientes,
     
     children: [
-      { path: ':id(\\d+)/editar', alias: ':id(\\d+)/alterar', 
-         components: {
-          default: ClienteEditar,
-        },
-        props: {
-          default: extrairParametroId,
-        },
+      { path: ':id(\\d+)/editar', components: ClienteEditar, props: extrairParametroId
       }, // produtos.com/clientes/2/editar
 
       { path: 'criar', component: ClienteCriar, name: 'clientecriar'
       }, // produtos.com/clientes/criar
 
-      {
-         path: '', 
-         component: ClientesHome, 
-         name: 'Clientes',
+      {path: '', component: ClientesHome, name: 'Clientes'
       },
+
       { path: '*', component: Erro404Clientes }
     ] 
   },
@@ -105,30 +86,17 @@ const routes = [
     path: '/pedidos', component: Pedidos,
 
     children: [
-      { path: ':id(\\d+)', component: PedidoDetalhes, name: 'pedido', props: extrairParametroId,
-      }, // produtos.com/pedidos/2
-
-
-      { path: ':id(\\d+)/editar', alias: ':id(\\d+)/alterar', 
-         components: {
-          default: PedidoEditar,
-          'cliente-detalhes': PedidoDetalhes
-        },
-        props: {
-          default: extrairParametroId,
-          'pedido-detalhes': extrairParametroId
-        },
+      { path: ':id(\\d+)/editar', component: PedidoEditar, props: extrairParametroId
       }, // produtos.com/pedidos/2/editar
 
-      {
-         path: '', 
-         component: PedidosHome, 
-         name: 'Pedidos',
-    
-      },
-      { path: '*', component: Erro404Pedidos }
+      { path: '', component: PedidosHome, name: 'Pedidos'
+      }, // produtos.com/pedidos
+
+      { path: '*', component: Erro404Pedidos 
+      }
     ] 
   },
+  { path: '*', component: Erro404 }
    
 ]
 
