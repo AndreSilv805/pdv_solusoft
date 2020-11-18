@@ -14,7 +14,7 @@
         </div>
 
         <hr>
-    <b-form @submit="editarCliente"><!--formulário criar produto-->
+    <b-form @submit.prevent="editarCliente"><!--formulário criar produto-->
 
       <b-form-group id="input-group-1" label="Cliente" label-for="input-cliente">
         <b-form-input
@@ -80,7 +80,6 @@ export default {
     },
     data() {
          return {
-            mensagemErro: undefined,
              cliente: {
                 cod_cliente:'',
                 nome: '',
@@ -107,7 +106,7 @@ export default {
 
             const response = await axios.put(`clientes/${this.id}`,this.cliente);
             console.log('GET /cliente', response)
-            this.cliente = response.data;
+            this.$router.push('/clientes')
         },
         async pegarCliente(){
 

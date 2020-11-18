@@ -213,29 +213,20 @@ export default {
         },
 
         async fecharPedido(){
-
           this.editarPedido();
           await axios.get(`pedidos/email/${this.id}`);
-          this.$router.push('/pedidos');
-         
+          this.$router.push('/pedidos'); 
         },
 
-         aguardarPedido(){
-
-          this.editarPedido();
-          this.$router.push('/pedidos');
-         
+         async aguardarPedido(){
+          await axios.put(`pedidos/${this.id}`,this.pedido)
+          this.$router.push('/pedidos') 
         },
 
-        async editarPedido(){
-            
-           await axios.put(`pedidos/${this.id}`,this.pedido);
-           
-            
+        async editarPedido(){   
+           await axios.put(`pedidos/${this.id}`,this.pedido);  
         },
 
-
-       
        buscar(event) {
          this.busca = event.target.value
   

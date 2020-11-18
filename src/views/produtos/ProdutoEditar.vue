@@ -17,7 +17,7 @@
 
         <hr>
 
-    <b-form class="mb-5" @submit="criarProduto"><!--formulário criar produto-->
+    <b-form class="mb-5" @submit.prevent="editarProduto"><!--formulário criar produto-->
       <b-form-group
         id="input-group-1"
         label="Produto"
@@ -123,19 +123,13 @@ export default {
     },
     
   methods:{
-         criarProduto() {
-            
+         editarProduto() { 
             axios.put(`produtos/${this.id}`,this.produto)
                 .then((response) => {
                     console.log('Produto criado com sucesso', response)
-                })
-                this.$router.push('/produtos')
+                    this.$router.push('/produtos')
+                })    
             },
-
-        async editarProduto(){
-            const response = await axios.put(`produtos/${this.id}`,this.produto);
-            this.produto = response.data;
-        },
 
         async pegarProduto(){
             const response = await axios.get(`produtos/${this.id}`);
