@@ -35,19 +35,6 @@
           <div class="col-12"> <h4 class="float-right pr-5">Total:  {{totalPedido | moedaReal}}</h4></div>
           
           <div style="clear:both"></div>            
-          
-          <!--<b-button class="mt-lg-2 ml-lg-2 col-lg-4" variant="danger" @click="$router.back()">Aguardar</b-button> 
-         
-          <router-link class="mt-lg-2 mr-lg-2 col-lg-4 btn btn-success float-right" :to="`/pedidorota/1/fechar`" @click="adicionar" >Finalizar</router-link>
-            
-           <b-form-textarea
-                    class="mt-lg-4"
-                    v-model="pedido.obeservacao"
-                    id="textarea-rows"
-                    placeholder="Observação do Pedido"
-                    rows="3">
-          </b-form-textarea>-->
-       
                
         </div>
 </template>
@@ -67,13 +54,6 @@ export default {
     },
 
     props: ['pedido'],
-
-    data() {
-        return {
-            pedidos: [],
-            
-        }
-    },
     
      filters: {
         moedaReal (value) {
@@ -89,34 +69,17 @@ export default {
             },0)
         },
         
-        pedidosFiltrados() {
-            const busca = this.busca
-            return !busca
-                ? this.pedidos
-                : this.pedidos.filter(p => p.observacao.toLowerCase().includes(busca.toLowerCase()))
-        }
-
-    },
-    created() {
-     this.getPedidos();
-    
-  
     },
 
     methods: {
-        async getPedidos() {
-
-                const response = await axios.get(`pedidos`);
-                this.pedidos = response.data;
-
-        },
-        async deletarItem(item2) {
-            const confirmar = window.confirm(`Deseja deletar o produto "${item2.nome}"?`)
+        
+        async deletarItem(item) {
+            const confirmar = window.confirm(`Deseja deletar o produto "${item.nome}"?`)
             if (confirmar) {
 
                 try {
-                    await axios.delete(`pedidos/remover/${item2.id}`)
-                    const indice = this.pedido.items.findIndex(i => i.id === item2.id)
+                    await axios.delete(`pedidos/remover/${item.id}`)
+                    const indice = this.pedido.items.findIndex(i => i.id === item.id)
                     this.pedido.items.splice(indice, 1)
                 } catch(error) {
                     console.log('Erro ao deletar Produto: ', error)
@@ -127,15 +90,6 @@ export default {
             }
         },
         
-        buscar(event) {
-            this.$router.push({
-                path: '/pedidos',
-                query: { busca: event.target.value }
-            })
-        },
-        voltar() {
-            this.$router.back()
-        },
     }
 }
 </script>

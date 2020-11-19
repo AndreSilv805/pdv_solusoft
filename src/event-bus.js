@@ -2,22 +2,29 @@ import Vue from 'vue'
 
 export default new Vue({
     data: {
-        autenticado: true,
-        contatos: [
-            { id: 1, nome: 'Isaac Newton', email: 'isaac@email.com' },
-            { id: 2, nome: 'Albert Einstein', email: 'einstein@email.com' },
-            { id: 3, nome: 'Stephen Hawking', email: 'stephen@email.com' },
-        ],
-        produtos: []
-    },
-    
-    methods: {
-        buscarContato(id) {
-            return Object.assign({}, this.contatos.find(c => c.id === id))
+        mensagem:{
+            texto:"",
+            tipo:""
         },
-        editarContato(contato) {
-            const indice = this.contatos.findIndex(c => c.id === contato.id)
-            this.contatos.splice(indice, 1, contato)
+        dismissCountDown:0,
+    },
+
+    created() {
+        this.$on('mensagemAlerta',(payload)=> {	
+            this.mensagem = payload;
+            this.dismissCountDown = 5
+        });
+        this.$on('zerar',(payload)=> {	
+            this.dismissCountDown = payload
+        });
+       },
+       methods: {
+        zerar() {
+            this.dismissCountDown = 0;
+            this.mensagem = {};
+
+            }
         }
-    }
+
+    
 })

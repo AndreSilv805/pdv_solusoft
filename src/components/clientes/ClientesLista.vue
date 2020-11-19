@@ -85,6 +85,7 @@ import ClientesListaItem from '@/components/clientes/ClientesListaItem.vue'
 
 
 import axios from 'axios'
+import EventBus from '@/event-bus'
 import {TheMask} from 'vue-the-mask'
 
 export default {
@@ -96,10 +97,10 @@ export default {
     data() {
         return {
             mensagem:{
-                texto:'',
-                tipo:''
+                texto:EventBus.mensagem.texto,
+                tipo:EventBus.mensagem.tipo,
             },
-            dismissCountDown:0, //temporizador em segundo alert*/
+            dismissCountDown:EventBus.dismissCountDown,
             clientes: [],
             meta: [],
             currentPage: 1,
@@ -114,6 +115,12 @@ export default {
      watch: {
         currentPage(){
             this.getClientes();
+        },
+        dismissCountDown(){
+            let esse = EventBus;
+            if(this.dismissCountDown == 4){
+               esse.zerar(0);
+            }
         }
     },
 
@@ -140,7 +147,15 @@ export default {
                     this.dismissCountDown = 10;
       
                 } catch(error) {
-                    console.log('Erro ao deletar Cliente: ', error)
+                    this.mensagem.tipo = "danger";
+                     this.dismissCountDown = 20;
+                     if (error.response) {
+                        this.mensagem.texto = `Não possivel excluir Cliente - Servidor retornou um erro: ${error.message} ${error.response.statusText}`;   
+                    } else if (error.request) {
+                        this.mensagem.texto = `Erro ao tentar comunicar com o servidor: ${error.message}`;
+                    } else {
+                        this.mensagem.texto = `Erro ao fazer requisição ao servidor: ${error.message}`;   
+                    }
                 } finally{
                     this.getClientes();  
                 }

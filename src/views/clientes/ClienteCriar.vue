@@ -70,13 +70,14 @@
 
 import axios from 'axios'
 import {TheMask} from 'vue-the-mask'
+import EventBus from '@/event-bus'
 
 export default {
     components: {TheMask},
 
     data() {
          return {
-            mensagemErro: undefined,
+
              cliente: {
                 cod_cliente:'',
                 nome: '',
@@ -97,6 +98,7 @@ export default {
             axios.post(`clientes`,this.cliente)
                 .then((response) => {
                     console.log('Cadastro criado com sucesso', response);
+                    EventBus.$emit('mensagemAlerta', {texto:"Cadastro criado com sucesso",tipo:"success"});
                     this.$router.push('/clientes')
                 })
 

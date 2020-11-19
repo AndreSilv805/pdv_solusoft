@@ -17,7 +17,7 @@
 
         <hr>
 
-    <b-form class="mb-5" @submit.prevent="editarProduto"><!--formulário criar produto-->
+    <b-form class="mb-5" @submit.prevent="editarProduto">
       <b-form-group
         id="input-group-1"
         label="Produto"
@@ -44,15 +44,13 @@
       <b-form-group id="input-group-3" label="Valor" label-for="input-valor">
         <b-form-input
           id="input-valor"
-          v-model="valorbr"
+          v-model="produto.valor"
           placeholder="Digite o valor "
           required
         ></b-form-input>
       </b-form-group>
       
-      <!--<h6 class="mb-2">OBJ PRODUTO PARA ADICIONAR: {{produto}}</h6><br>-->
-      
-  
+
         <label class="my-2" for="tags-pills">Informe as cores  do Produto</label>
         <b-form-tags
           input-id="tags-pills"
@@ -79,7 +77,7 @@
 
       <b-button class="mt-4" type="submit" variant="primary">Salvar</b-button>
 
-       </b-form><!--fim criar produto-->
+       </b-form>
 
     </div>
      
@@ -91,6 +89,7 @@
 
 
 import axios from 'axios'
+import EventBus from '@/event-bus'
 
 export default {
     props: {
@@ -125,8 +124,8 @@ export default {
   methods:{
          editarProduto() { 
             axios.put(`produtos/${this.id}`,this.produto)
-                .then((response) => {
-                    console.log('Produto criado com sucesso', response)
+                .then(() => {
+                    EventBus.$emit('mensagemAlerta', {texto:"Produto salvo com sucesso",tipo:"success"});
                     this.$router.push('/produtos')
                 })    
             },

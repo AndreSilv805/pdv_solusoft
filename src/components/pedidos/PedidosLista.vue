@@ -87,6 +87,7 @@ import PedidosListaItem from '@/components/pedidos/PedidosListaItem.vue'
 
 
 import axios from 'axios'
+import EventBus from '@/event-bus'
 
 
 
@@ -97,10 +98,11 @@ export default {
 
     data() {
         return {
-            mensagem:{
-                texto:'',
-                tipo:''
+             mensagem:{
+                texto:EventBus.mensagem.texto,
+                tipo:EventBus.mensagem.tipo,
             },
+            dismissCountDown:EventBus.dismissCountDown,
             pedidos: [],
             meta: [],
             rows: 7,
@@ -111,20 +113,20 @@ export default {
                 obeservacao:this.$route.query.obeservacao,
                 created_at:this.$route.query.created_at
             },
-            dismissCountDown: 0 //temporizador em segundo alert
         }
     },
 
     watch: {
         currentPage(){
             this.getPedidos();
+        },
+        dismissCountDown(){
+            let esse = EventBus;
+            if(this.dismissCountDown == 4){
+               esse.zerar(0);
+            }
         }
     },
-
-    /*beforeRouteUpdate(to, from, next) {
-            this.parametros.id = to.query.id
-            next()
-    },*/
     
     created() {
      this.getPedidos();

@@ -15,7 +15,7 @@
 
         <hr>
 
-    <b-form @submit.prevent="criarProduto"><!--formulário criar produto-->
+    <b-form @submit.prevent="criarProduto">
       <b-form-group
         id="input-group-1"
         label="Produto"
@@ -76,7 +76,7 @@
 
       <b-button class="mt-4" type="submit" variant="primary">Salvar</b-button>
 
-       </b-form><!--fim criar produto-->
+       </b-form>
        
        
 
@@ -86,12 +86,11 @@
 <script>
 
 import axios from 'axios'
+import EventBus from '@/event-bus'
 
 export default {
     data() {
          return {
-        
-            mensagem:'teste de envio',
              produto: {
                 cod_produto:'',
                 nome: '',
@@ -104,22 +103,15 @@ export default {
          }
     },
 
-     /*beforeRouteLeave(to, from, next) {
-        next(vm => {
-            vm.ProdutosLista.getProdutos();
-        })
-    },*/
-
     methods: {
     criarProduto() {
             
             axios.post(`produtos`,this.produto)
-                .then((response) => {
-                    console.log('Produto criado com sucesso', response);
+                .then(() => {
                     this.mensagem = "Produto criado com sucesso";
+                    EventBus.$emit('mensagemAlerta', {texto:"Produto salvo com sucesso",tipo:"success"});
                     this.$router.push('/produtos')
                 })
-
                 
             },
             

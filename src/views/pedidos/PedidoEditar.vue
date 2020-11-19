@@ -94,6 +94,7 @@
 <script>
 
 import axios from 'axios'
+import EventBus from '@/event-bus'
 import PedidosVenda from '@/components/pedidos/PedidosVenda.vue'
 
 export default {
@@ -109,7 +110,6 @@ export default {
         pedido:[],
 
         pedidoslocal:{ id: null, cod_produto: '', nome: '', valor: 0.00, cores:'', tamanhos:'', quantidade: 0, selecaocores:"", selecaotamanhos:"" },
-
 
         busca:undefined,
 
@@ -215,11 +215,12 @@ export default {
         async fecharPedido(){
           this.editarPedido();
           await axios.get(`pedidos/email/${this.id}`);
-          this.$router.push('/pedidos'); 
+          this.$router.push('/pedidos') 
         },
 
          async aguardarPedido(){
-          await axios.put(`pedidos/${this.id}`,this.pedido)
+          await axios.put(`pedidos/${this.id}`,this.pedido);
+          EventBus.$emit('mensagemAlerta', {texto:"Pedido salvo com sucesso",tipo:"success"});
           this.$router.push('/pedidos') 
         },
 

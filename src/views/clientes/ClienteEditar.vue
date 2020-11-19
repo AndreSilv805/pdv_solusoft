@@ -68,6 +68,7 @@
 <script>
 
 import axios from 'axios'
+import EventBus from '@/event-bus'
 import {TheMask} from 'vue-the-mask'
 
 export default {
@@ -106,6 +107,7 @@ export default {
 
             const response = await axios.put(`clientes/${this.id}`,this.cliente);
             console.log('GET /cliente', response)
+            EventBus.$emit('mensagemAlerta', {texto:"Cadastro salvo com sucesso",tipo:"success"});
             this.$router.push('/clientes')
         },
         async pegarCliente(){

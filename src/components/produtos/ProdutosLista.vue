@@ -85,6 +85,7 @@ import ProdutosListaItem from '@/components/produtos/ProdutosListaItem.vue'
 
 
 import axios from 'axios'
+import EventBus from '@/event-bus'
 
 
 
@@ -94,12 +95,12 @@ export default {
     },
 
     data() {
-        return {
+        return { 
             mensagem:{
-                texto:'',
-                tipo:''
+                texto:EventBus.mensagem.texto,
+                tipo:EventBus.mensagem.tipo,
             },
-            dismissCountDown:0, //temporizador em segundo alert*/
+            dismissCountDown:EventBus.dismissCountDown,
             produtos:[],
             meta: [],
             currentPage: 1,
@@ -114,7 +115,14 @@ export default {
     watch: {
         currentPage(){
             this.getProdutos();
+        },
+        dismissCountDown(){
+            let esse = EventBus;
+            if(this.dismissCountDown == 4){
+               esse.zerar(0);
+            }
         }
+       
     },
 
     created() {
@@ -139,7 +147,16 @@ export default {
                     this.mensagem.tipo = "success"
                     this.dismissCountDown = 10;
                 } catch(error) {
-                    console.log('Erro ao deletar Tarefa: ', error)
+                    this.mensagem.tipo = "danger";
+                     this.dismissCountDown = 20;
+                     if (error.response) {
+                        this.mensagem.texto = `Não possivel excluir Produto - Servidor retornou um erro: ${error.message} ${error.response.statusText}`;   
+                    } else if (error.request) {
+                        this.mensagem.texto = `Erro ao tentar comunicar com o servidor: ${error.message}`;
+                    } else {
+                        this.mensagem.texto = `Erro ao fazer requisição ao servidor: ${error.message}`;   
+                    }
+
                 } finally {
                     this.getProdutos();
                 }
