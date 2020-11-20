@@ -14,7 +14,7 @@
         </div>
 
           <hr>
-            <div class="form-row mt-4">
+            <div class="form-row mt-2">
                 <div class="col-3">
                 <input type="search" class="form-control" placeholder="Código" v-model="parametros.cod_cliente" @keyup.enter="getClientes">
                 </div>

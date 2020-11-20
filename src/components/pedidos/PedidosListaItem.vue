@@ -1,28 +1,46 @@
 <template>
     
-     <tr>
+     <tr >
       <td  >{{pedido.id}}</td>
       <td >{{pedido.created_at | dataBr}}</td>
       <td style="text-align:left" >{{pedido.obeservacao}}</td>
-      <td >
-           <b-button 
-             title="Deletar"
+      <td class="p-0" >
+        <b-button 
+             title="Enviar Email"
              size="sm"  
-             variant="danger" 
-             class=" mr-2"
-             @click="$emit('delete', pedido)">
-              <b-icon icon="trash" aria-label="Excluir"></b-icon>
-         </b-button>
-          
-          <router-link 
+             variant="info" 
+             class="m-1"
+             @click="$emit('email', pedido)">
+              <b-icon icon="envelope" aria-label="Excluir"></b-icon>
+        </b-button>
+
+        <b-button 
+             title="Imprimir"
+             size="sm"  
+             variant="info" 
+             class=" m-1"
+             @click="$emit('imprimir', pedido)">
+              <b-icon icon="printer" aria-label="Excluir"></b-icon>
+        </b-button>
+
+        <router-link 
            title="Editar"
             :to="{ 
                 path: `/pedidos/${pedido.id}/editar`
             }"
-            class="btn btn-info btn-sm">
+            class="btn btn-info btn-sm m-1 ">
                <b-icon icon="pencil-square" aria-label="Excluir"></b-icon>
         </router-link>
-      
+
+        <b-button 
+             title="Deletar"
+             size="sm"
+             variant="danger" 
+             class="m-1"
+             @click="$emit('delete', pedido)">
+              <b-icon icon="trash" aria-label="Excluir"></b-icon>
+         </b-button>
+
         </td>
     </tr>
 

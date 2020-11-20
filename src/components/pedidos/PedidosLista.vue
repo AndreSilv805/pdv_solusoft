@@ -17,7 +17,7 @@
         <hr>
 
      
-            <div class="form-row mt-4">
+            <div class="form-row mt-2">
                 <div class="col-3">
                 <input type="search" class="form-control" placeholder="Código" v-model="parametros.id" @keyup.enter="getPedidos">
                 </div>
@@ -61,7 +61,9 @@
                 <tbody  style="text-align:center" class="table table-striped table-sm table-bordered"> 
                     <PedidosListaItem
                                 v-for="ped in pedidos"
-                                @delete="deletarPedido" 
+                                @delete="deletarPedido"
+                                @imprimir="imprimirPedido" 
+                                @email="enviarEmail" 
                                 :key="ped.id"
                                 :pedido="ped"/>   
                 </tbody>        
@@ -194,6 +196,31 @@ export default {
         async criarPedido() {
             const response = await axios.post(`pedidos`);
             this.$router.push({ path: `/pedidos/${response.data.id}/editar`})
+        },
+
+        imprimirPedido(pedido) {
+         window.open(`http://127.0.0.1/pdvsolusoft/blog/public/api/pedidos/pdf/${pedido.id}`, '_blank');
+        },
+
+        async enviarEmail(pedido) {
+          try {
+                    await axios.get(`pedidos/email/${pedido.id}`);
+                    this.mensagem.texto = 'Email enviado com sucesso';
+                    this.mensagem.tipo = "success"
+                    this.dismissCountDown = 5;
+
+                } catch(error) {
+                     this.mensagem.tipo = "danger";
+                     this.dismissCountDown = 0;
+                     if (error.response) {
+                        this.mensagem.texto = `Não foi possível enviar email - Servidor retornou um erro: ${error.message} ${error.response.statusText}`;   
+                    } else if (error.request) {
+                        this.mensagem.texto = `Erro ao tentar comunicar com o servidor: ${error.message}`;
+                    } else {
+                        this.mensagem.texto = `Erro ao fazer requisição ao servidor: ${error.message}`;   
+                    }
+
+                }
         },
 
         countDownChanged(dismissCountDown) {
