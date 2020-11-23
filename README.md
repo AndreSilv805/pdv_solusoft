@@ -22,4 +22,10 @@ Para instalar esta aplicação.
 ```
 npm run build
 ```
+## Configurar baseURL
+No arquivo src/plugins/axios.js
+```
+axios.defaults.baseURL = 'substitua pelo endereço da api';
+```
+
 
