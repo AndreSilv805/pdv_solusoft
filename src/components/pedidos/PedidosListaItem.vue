@@ -11,7 +11,7 @@
              variant="info" 
              class="m-1"
              @click="$emit('email', pedido)">
-              <b-icon icon="envelope" aria-label="Excluir"></b-icon>
+              <b-icon icon="envelope" aria-label="Email"></b-icon>
         </b-button>
 
         <b-button 
@@ -20,7 +20,7 @@
              variant="info" 
              class=" m-1"
              @click="$emit('imprimir', pedido)">
-              <b-icon icon="printer" aria-label="Excluir"></b-icon>
+              <b-icon icon="printer" aria-label="Imprimir"></b-icon>
         </b-button>
 
         <router-link 
@@ -29,7 +29,7 @@
                 path: `/pedidos/${pedido.id}/editar`
             }"
             class="btn btn-info btn-sm m-1 ">
-               <b-icon icon="pencil-square" aria-label="Excluir"></b-icon>
+               <b-icon icon="pencil-square" aria-label="Editar"></b-icon>
         </router-link>
 
         <b-button 
@@ -38,7 +38,7 @@
              variant="danger" 
              class="m-1"
              @click="$emit('delete', pedido)">
-              <b-icon icon="trash" aria-label="Excluir"></b-icon>
+              <b-icon icon="trash" aria-label="Deletar"></b-icon>
          </b-button>
 
         </td>

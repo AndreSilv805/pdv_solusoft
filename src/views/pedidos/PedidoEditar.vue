@@ -1,15 +1,14 @@
 <template>
-   <!--<div class="container">-->
+   
   <div>
   
   <div class="mt-2 ">
        
-       <!-- <div style="height:700px" class=" col-2 col-lg-2 float-left"></div>-->
-        <div id="esquerda"  style="background-color:#F6F6F6 " class=" col-sm-12 col-lg-4 float-left">
+         <div id="esquerda"  style="background-color:#F6F6F6 " class=" col-sm-12 col-lg-4 float-left">
           
           <div style="background-color:#343a40; padding:10px; color:#FFFFFF">
               <span class="mr-2"><strong>Código Pedido: </strong>{{pedido.id}}</span>
-              <span class="mr-5"><strong>Data Pedido: </strong>{{pedido.created_at}}</span>
+              <span class="mr-5"><strong>Data Pedido: </strong>{{pedido.created_at | dataBr}}</span>
           </div>    
 
            <div class="mt-3 info ">Selecione uma cliente: </div>
@@ -120,7 +119,12 @@ export default {
     filters: {
         moedaReal (value) {
         return value.toLocaleString('pt-br',{style:'currency',currency:'BRL'})
-        }
+        },
+        dataBr (value) {
+        let data = new Date(value);
+        let dataFormatada = ((data.getDate())) + "/" + ((data.getMonth() + 1)) + "/" + data.getFullYear(); 
+        return dataFormatada
+        }    
     },
     computed:{
          atualizaProdutos: function () {
@@ -154,6 +158,7 @@ export default {
     this.getClientes();
 
     },
+  
     methods: {
         async getProdutos() {
 
@@ -190,7 +195,7 @@ export default {
                 },response.data)            
         },
         async adicionarProduto(){
-          
+
           this.editarPedido();
             
            await axios.put(`pedidos/${this.id}/add`,this.pedidoslocal);
@@ -213,8 +218,7 @@ export default {
         },
 
         async fecharPedido(){
-          this.editarPedido();
-          await axios.get(`pedidos/email/${this.id}`);
+           await axios.put(`pedidos/${this.id}`,this.pedido);
           this.$router.push('/pedidos') 
         },
 

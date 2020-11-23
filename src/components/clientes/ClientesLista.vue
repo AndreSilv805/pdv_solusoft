@@ -117,9 +117,9 @@ export default {
             this.getClientes();
         },
         dismissCountDown(){
-            let esse = EventBus;
+            let eventBus = EventBus;
             if(this.dismissCountDown == 4){
-               esse.zerar(0);
+               eventBus.zerar(0);
             }
         }
     },
@@ -130,10 +130,26 @@ export default {
 
     methods: {
         async getClientes() {
-
-                const response = await axios.get(`http://127.0.0.1/pdvsolusoft/blog/public/api/clientes-search?page=`+this.currentPage,{params:this.parametros});
+             try {
+                const response = await axios.get(`clientes-search?page=`+this.currentPage,{params:this.parametros});
                 this.clientes = response.data.data;
                 this.meta = response.data;
+
+                 this.$router.push({
+                    path: '/clientes',
+                    query: this.parametros 
+                    })
+                } catch(error) {
+                    this.mensagem.tipo = "danger";
+                    this.dismissCountDown = 20;
+                     if (error.response) {
+                        this.mensagem.texto = `Erro ao listar Cleintes - Servidor retornou um erro: ${error.message} ${error.response.statusText}`;
+                    } else if (error.request) {
+                        this.mensagem.texto = `Erro ao tentar comunicar com o servidor: ${error.message}`;
+                    } else {
+                        this.mensagem.texto = `Erro ao fazer requisição ao servidor: ${error.message}`;
+                    }
+                }
 
         },
 
@@ -141,10 +157,10 @@ export default {
             const confirmar = window.confirm(`Deseja deletar cliente: "${cliente.nome}"?`)
             if (confirmar) {
                 try {
-                    await axios.delete(`http://127.0.0.1/pdvsolusoft/blog/public/api/clientes/${cliente.id}`);
+                    await axios.delete(`clientes/${cliente.id}`);
                     this.mensagem.texto = 'Cliente excluido com sucesso';
                     this.mensagem.tipo = "success";
-                    this.dismissCountDown = 10;
+                    this.dismissCountDown = 5;
       
                 } catch(error) {
                     this.mensagem.tipo = "danger";

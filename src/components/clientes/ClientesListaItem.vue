@@ -2,7 +2,6 @@
      <tr>
       <td >{{cliente.cod_cliente}}</td>
       <td style="text-align:left" >{{cliente.nome}}</td>
-       <!--<td>{{cliente.cpf}}</td>-->
       <td ><the-mask style="text-align:center"  :mask="['###.###.###-##']" v-model="cliente.cpf" disabled/></td>
       <td >{{cliente.email}}</td>
       <td >
@@ -21,7 +20,7 @@
                 path: `/clientes/${cliente.id}/editar`
             }"
             class="btn btn-info btn-sm">
-               <b-icon icon="pencil-square" aria-label="Excluir"></b-icon>
+               <b-icon icon="pencil-square" aria-label="Editar"></b-icon>
         </router-link>
      </td>
     </tr>

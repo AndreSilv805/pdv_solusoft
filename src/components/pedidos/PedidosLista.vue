@@ -17,7 +17,7 @@
         <hr>
 
      
-            <div class="form-row mt-2">
+            <div class="form-row">
                 <div class="col-3">
                 <input type="search" class="form-control" placeholder="Código" v-model="parametros.id" @keyup.enter="getPedidos">
                 </div>
@@ -60,12 +60,12 @@
 
                 <tbody  style="text-align:center" class="table table-striped table-sm table-bordered"> 
                     <PedidosListaItem
-                                v-for="ped in pedidos"
+                                v-for="pedido in pedidos"
                                 @delete="deletarPedido"
                                 @imprimir="imprimirPedido" 
                                 @email="enviarEmail" 
-                                :key="ped.id"
-                                :pedido="ped"/>   
+                                :key="pedido.id"
+                                :pedido="pedido"/>   
                 </tbody>        
         </table>
                
@@ -107,9 +107,7 @@ export default {
             dismissCountDown:EventBus.dismissCountDown,
             pedidos: [],
             meta: [],
-            rows: 7,
             currentPage: 1,
-            perPage: 4,
             parametros:{
                 id:this.$route.query.id,
                 obeservacao:this.$route.query.obeservacao,
@@ -123,9 +121,9 @@ export default {
             this.getPedidos();
         },
         dismissCountDown(){
-            let esse = EventBus;
+            let eventBus = EventBus;
             if(this.dismissCountDown == 4){
-               esse.zerar(0);
+               eventBus.zerar(0);
             }
         }
     },
@@ -149,17 +147,13 @@ export default {
                     })
                 } catch(error) {
                     this.mensagem.tipo = "danger";
-                    this.dismissCountDown = 10;
-                    
+                    this.dismissCountDown = 20;
                      if (error.response) {
                         this.mensagem.texto = `Erro ao listar Pedidos - Servidor retornou um erro: ${error.message} ${error.response.statusText}`;
-                        this.mensagem.tipo = "danger"
                     } else if (error.request) {
                         this.mensagem.texto = `Erro ao tentar comunicar com o servidor: ${error.message}`;
-                        this.mensagem.tipo = "danger"
                     } else {
                         this.mensagem.texto = `Erro ao fazer requisição ao servidor: ${error.message}`;
-                        this.mensagem.tipo = "danger"
                     }
                 }
 
@@ -173,7 +167,7 @@ export default {
                     await axios.delete(`pedidos/${pedido.id}`);
                     this.mensagem.texto = 'Pedido excluido com sucesso';
                     this.mensagem.tipo = "success"
-                    this.dismissCountDown = 10;
+                    this.dismissCountDown = 5;
 
                 } catch(error) {
                      this.mensagem.tipo = "danger";
@@ -185,7 +179,6 @@ export default {
                     } else {
                         this.mensagem.texto = `Erro ao fazer requisição ao servidor: ${error.message}`;   
                     }
-
                 } finally {
                     this.getPedidos();
                 }
@@ -194,12 +187,24 @@ export default {
         },
 
         async criarPedido() {
-            const response = await axios.post(`pedidos`);
-            this.$router.push({ path: `/pedidos/${response.data.id}/editar`})
+             try {
+                const response = await axios.post(`pedidos`);
+                this.$router.push({ path: `/pedidos/${response.data.id}/editar`})
+            } catch(error) {
+                this.mensagem.tipo = "danger";
+                this.dismissCountDown = 20;
+                    if (error.response) {
+                    this.mensagem.texto = `Erro ao criar Pedido - Servidor retornou um erro: ${error.message} ${error.response.statusText}`;
+                } else if (error.request) {
+                    this.mensagem.texto = `Erro ao tentar comunicar com o servidor: ${error.message}`;
+                } else {
+                    this.mensagem.texto = `Erro ao fazer requisição ao servidor: ${error.message}`;
+                }
+            }
         },
 
         imprimirPedido(pedido) {
-         window.open(`http://127.0.0.1/pdvsolusoft/blog/public/api/pedidos/pdf/${pedido.id}`, '_blank');
+          window.open(`${axios.defaults.baseURL}/pedidos/pdf/${pedido.id}`, '_blank');
         },
 
         async enviarEmail(pedido) {
@@ -211,7 +216,7 @@ export default {
 
                 } catch(error) {
                      this.mensagem.tipo = "danger";
-                     this.dismissCountDown = 0;
+                     this.dismissCountDown = 20;
                      if (error.response) {
                         this.mensagem.texto = `Não foi possível enviar email - Servidor retornou um erro: ${error.message} ${error.response.statusText}`;   
                     } else if (error.request) {

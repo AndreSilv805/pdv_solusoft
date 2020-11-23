@@ -1,5 +1,13 @@
 <template>
     <div class="container py-4"> 
+     <b-alert
+            :show="dismissCountDown"
+            dismissible
+            :variant="mensagem.tipo"
+            @dismiss-count-down="countDownChanged"
+      >
+            {{mensagem.texto}}
+      </b-alert> 
      <div class="row">
             <div class="col-sm-10">
                 <h1 class="font-weight-light">Cadastro de Clientes</h1>
@@ -77,7 +85,11 @@ export default {
 
     data() {
          return {
-
+            mensagem:{
+                texto:'',
+                tipo:'',
+            },
+            dismissCountDown:0,
              cliente: {
                 cod_cliente:'',
                 nome: '',
@@ -93,17 +105,28 @@ export default {
          }
     },
     methods: {
-    criarCliente() {
-            
-            axios.post(`clientes`,this.cliente)
-                .then((response) => {
-                    console.log('Cadastro criado com sucesso', response);
-                    EventBus.$emit('mensagemAlerta', {texto:"Cadastro criado com sucesso",tipo:"success"});
-                    this.$router.push('/clientes')
-                })
+    async criarCliente() {
+             try {
+                await  axios.post(`clientes`,this.cliente);
+                EventBus.$emit('mensagemAlerta', {texto:"Cadastro criado com sucesso",tipo:"success"});
+                this.$router.push('/clientes')
 
-            },
-            
+                } catch(error) {
+                    this.mensagem.tipo = "danger";
+                    this.dismissCountDown = 20;
+                     if (error.response) {
+                        this.mensagem.texto = `Erro ao cadastrar Cliente - Servidor retornou um erro: ${error.message} ${error.response.statusText}`;
+                    } else if (error.request) {
+                        this.mensagem.texto = `Erro ao tentar comunicar com o servidor: ${error.message}`;
+                    } else {
+                        this.mensagem.texto = `Erro ao fazer requisição ao servidor: ${error.message}`;
+                    }
+                }
+
+        },                
+    },
+    countDownChanged(dismissCountDown) {
+            this.dismissCountDown = dismissCountDown
     },
 
 }

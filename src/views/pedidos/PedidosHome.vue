@@ -9,8 +9,6 @@
 
 import PedidosLista from './../../components/pedidos/PedidosLista.vue'
 
-
-
 export default {
     components: {
         PedidosLista

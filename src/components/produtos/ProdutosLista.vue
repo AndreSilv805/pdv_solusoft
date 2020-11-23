@@ -57,10 +57,10 @@
                 <tbody style="text-align:center" class="table table-striped table-sm table-bordered">
                    
                     <ProdutosListaItem
-                                v-for="prod in produtos"
-                                @delete="deletarTarefa"
-                                :key="prod.id"
-                                :produto="prod"/>
+                                v-for="produto in produtos"
+                                @delete="deletarProduto"
+                                :key="produto.id"
+                                :produto="produto"/>
                    
                 </tbody>
                 
@@ -117,9 +117,9 @@ export default {
             this.getProdutos();
         },
         dismissCountDown(){
-            let esse = EventBus;
+            let eventBus = EventBus;
             if(this.dismissCountDown == 4){
-               esse.zerar(0);
+               eventBus.zerar(0);
             }
         }
        
@@ -131,13 +131,29 @@ export default {
 
     methods: {
         async getProdutos() {
-
+            try {
                 const response = await axios.get(`produtos-search?page=`+this.currentPage,{params:this.parametros});
                 this.produtos = response.data.data;
                 this.meta = response.data;
 
+                 this.$router.push({
+                    path: '/produtos',
+                    query: this.parametros 
+                    })
+                } catch(error) {
+                    this.mensagem.tipo = "danger";
+                    this.dismissCountDown = 20;
+                     if (error.response) {
+                        this.mensagem.texto = `Erro ao listar Produtos - Servidor retornou um erro: ${error.message} ${error.response.statusText}`;
+                    } else if (error.request) {
+                        this.mensagem.texto = `Erro ao tentar comunicar com o servidor: ${error.message}`;
+                    } else {
+                        this.mensagem.texto = `Erro ao fazer requisição ao servidor: ${error.message}`;
+                    }
+                }
+
         },
-        async deletarTarefa(produto) {
+        async deletarProduto(produto) {
             const confirmar = window.confirm(`Deseja deletar o produto "${produto.nome}"?`)
             if (confirmar) {
 
@@ -145,10 +161,10 @@ export default {
                     await axios.delete(`produtos/${produto.id}`)
                     this.mensagem.texto = 'Produto excluido com sucesso';
                     this.mensagem.tipo = "success"
-                    this.dismissCountDown = 10;
+                    this.dismissCountDown = 5;
                 } catch(error) {
                     this.mensagem.tipo = "danger";
-                     this.dismissCountDown = 20;
+                    this.dismissCountDown = 20;
                      if (error.response) {
                         this.mensagem.texto = `Não possivel excluir Produto - Servidor retornou um erro: ${error.message} ${error.response.statusText}`;   
                     } else if (error.request) {

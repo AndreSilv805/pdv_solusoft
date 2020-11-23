@@ -1,5 +1,13 @@
 <template>
     <div class="container py-4"> 
+     <b-alert
+            :show="dismissCountDown"
+            dismissible
+            :variant="mensagem.tipo"
+            @dismiss-count-down="countDownChanged"
+      >
+            {{mensagem.texto}}
+     </b-alert> 
      <div class="row">
             <div class="col-sm-10">
                 <h1 class="font-weight-light">Cadastro de produtos</h1>
@@ -75,7 +83,7 @@
 
 
       <b-button class="mt-4" type="submit" variant="primary">Salvar</b-button>
-
+      {{produto.valor}}
        </b-form>
        
        
@@ -91,6 +99,11 @@ import EventBus from '@/event-bus'
 export default {
     data() {
          return {
+              mensagem:{
+                texto:'',
+                tipo:'',
+            },
+            dismissCountDown:0,
              produto: {
                 cod_produto:'',
                 nome: '',
@@ -103,18 +116,31 @@ export default {
          }
     },
 
+   
+
     methods: {
-    criarProduto() {
-            
-            axios.post(`produtos`,this.produto)
-                .then(() => {
-                    this.mensagem = "Produto criado com sucesso";
-                    EventBus.$emit('mensagemAlerta', {texto:"Produto salvo com sucesso",tipo:"success"});
-                    this.$router.push('/produtos')
-                })
-                
-            },
-            
+     async criarProduto() {
+             try {
+                await  axios.post(`produtos`,this.produto);
+                EventBus.$emit('mensagemAlerta', {texto:"Produto salvo com sucesso",tipo:"success"});
+                this.$router.push('/produtos')
+
+                } catch(error) {
+                    this.mensagem.tipo = "danger";
+                    this.dismissCountDown = 20;
+                     if (error.response) {
+                        this.mensagem.texto = `Erro ao cadastrar Produto - Servidor retornou um erro: ${error.message} ${error.response.statusText}`;
+                    } else if (error.request) {
+                        this.mensagem.texto = `Erro ao tentar comunicar com o servidor: ${error.message}`;
+                    } else {
+                        this.mensagem.texto = `Erro ao fazer requisição ao servidor: ${error.message}`;
+                    }
+                }
+
+        },                
+    },
+    countDownChanged(dismissCountDown) {
+            this.dismissCountDown = dismissCountDown
     },
 
 }
