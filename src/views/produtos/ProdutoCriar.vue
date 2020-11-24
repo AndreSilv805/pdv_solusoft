@@ -30,7 +30,7 @@
         label-for="input-produto"
       >
         <b-form-input
-          id="input"
+          id="input-produto"
           v-model="produto.nome"
           type="text"
           required
@@ -83,7 +83,7 @@
 
 
       <b-button class="mt-4" type="submit" variant="primary">Salvar</b-button>
-      {{produto.valor}}
+
        </b-form>
        
        

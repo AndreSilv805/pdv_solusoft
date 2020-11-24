@@ -25,8 +25,8 @@
             <h5 class="mb-2">Produto: {{nomeProduto}}</h5>
 
 
-            <b-form-group class=" p-0 text-left col-lg-12" id="input-group-1" label="Código do Produto" label-for="input-4">
-              <b-form-input id="input-4" type="text" placeholder="Buscar por produto"  @keyup.enter="buscar" :value = "busca" ></b-form-input>
+            <b-form-group class=" p-0 text-left col-lg-12" id="busca-group" label="Código do Produto" label-for="input-busca">
+              <b-form-input id="input-busca" type="text" placeholder="Buscar por produto"  @keyup.enter="buscarProduto" :value = "busca" ></b-form-input>
             </b-form-group>  
 
             <div class="mt-3 info">Selecione uma cor:{{pedidoslocal.selecaocores}} </div>
@@ -38,23 +38,23 @@
             <div class="mt-3 info">Selecione um tamanho:{{pedidoslocal.selecaotamanhos}} </div>
             <select v-model="pedidoslocal.selecaotamanhos" class="custom-select mr-sm-2 mb-3" >
                 <option value="" selected>Selecione um tamanho</option>
-                <option  v-for="(tamanho, index) in opcaoTamanho" :key="index" :v-model="tamanho">{{tamanho}}</option>
+                <option  v-for="(tamanho, index) in  opcaoTamanho" :key="index" :v-model="tamanho">{{tamanho}}</option>
             </select>
 
         
 
-            <b-form-group class="p-0 text-left col-lg-4 float-left pr-2 pl-2" id="input-group-1" label="Quantidade" label-for="input-1">
-              <b-form-input style="text-align:center" id="input-1" type="number"  v-model="pedidoslocal.quantidade" ></b-form-input>
+            <b-form-group class="p-0 text-left col-lg-4 float-left pr-2 pl-2" id="quantidade-group" label="Quantidade" label-for="input-quantidade">
+              <b-form-input style="text-align:center" id="input-quantidade" type="number"  v-model="pedidoslocal.quantidade" ></b-form-input>
             </b-form-group>
             
            
-            <b-form-group class=" p-0 text-left col-lg-4 float-left pr-2 pl-2" id="input-group-1" label="Valor Unid." label-for="input-2">
-              <b-form-input style="text-align:right" id="input-2" type="number" v-model="pedidoslocal.valor" disabled>teste</b-form-input>
+            <b-form-group class=" p-0 text-left col-lg-4 float-left pr-2 pl-2" id="valor-group" label="Valor Unid." label-for="input-valor">
+              <b-form-input style="text-align:right" id="input-valor" type="number" v-model="pedidoslocal.valor" disabled>teste</b-form-input>
             </b-form-group>
           
 
-            <b-form-group class=" p-0 text-left col-lg-4  float-left pr-2 pl-2 mb-6" id="input-group-1" label="Valor Total" label-for="input-3">
-              <b-form-input style="text-align:right"  id="input-3" type="number" v-model="total"  placeholder="0.00" disabled></b-form-input>
+            <b-form-group class=" p-0 text-left col-lg-4  float-left pr-2 pl-2 mb-6" id="total-group" label="Valor Total" label-for="input-total">
+              <b-form-input style="text-align:right"  id="input-total" type="number" v-model="total"  placeholder="0.00" disabled></b-form-input>
             </b-form-group> 
 
              <b-button class="mt-lg-2 mb-2 col-lg-12 float-left" variant="success" @click="adicionarProduto">Adicionar</b-button> 
@@ -103,11 +103,9 @@ export default {
     props: ['id'],
     data() {
         return {
-        produtos:[],
         clientes:[],
         formapagamento:['Dinheiro','Cartão','Cheque'],
         pedido:[],
-
         pedidoslocal:{ id: null, cod_produto: '', nome: '', valor: 0.00, cores:'', tamanhos:'', quantidade: 0, selecaocores:"", selecaotamanhos:"" },
 
         busca:undefined,
@@ -121,135 +119,89 @@ export default {
         return value.toLocaleString('pt-br',{style:'currency',currency:'BRL'})
         },
         dataBr (value) {
-        let data = new Date(value);
-        let dataFormatada = ((data.getDate())) + "/" + ((data.getMonth() + 1)) + "/" + data.getFullYear(); 
-        return dataFormatada
+            let data = new Date(value)
+            let dataFormatada = ((data.getDate())) + "/" + ((data.getMonth() + 1)) + "/" + data.getFullYear()
+            return dataFormatada
         }    
     },
     computed:{
          atualizaProdutos: function () {
-            return this.produtos;
+            return this.produtos
         },
 
         nomeProduto: function () {
+            return this.pedidoslocal.nome +' '+this.pedidoslocal.selecaocores+' '+this.pedidoslocal.selecaotamanhos
+         },
 
-            return this.pedidoslocal.nome +' '+this.pedidoslocal.selecaocores+' '+this.pedidoslocal.selecaotamanhos;
+        total: function () {
+            return this.pedidoslocal.quantidade*this.pedidoslocal.valor
          },
 
          opcaoCor: function () {
-            return this.pedidoslocal.cores.split(",")
+            return this.pedidoslocal.cores.split(",");
          },
 
          opcaoTamanho: function () {
-            return this.pedidoslocal.tamanhos.split(",")
-         },
-
-         
-          total: function () {
-            return this.pedidoslocal.quantidade*this.pedidoslocal.valor;
+            return this.pedidoslocal.tamanhos.split(",");
          },
       
     },
    
     created(){
 
-    this.getProdutos();
-    this.getPedido();
-    this.getClientes();
+        this.getPedido()
+        this.getClientes()
 
     },
   
     methods: {
-        async getProdutos() {
-
-                const response = await axios.get(`produtos`);
-                this.produtos = response.data;
-
-        },
          async getClientes() {
 
-                const response = await axios.get(`clientes`);
-                this.clientes = response.data;
+          const response = await axios.get(`clientes`)
+          this.clientes = response.data
 
         },
          async getPedido() {
 
-                const response = await axios.get(`pedidos/${this.id}`);
-                this.pedido = response.data;
+          const response = await axios.get(`pedidos/${this.id}`)
+          this.pedido = response.data
 
         },
         async buscarProduto(event){
 
-            this.busca = event.target.value
+          this.busca = event.target.value
+          const response = await axios.get(`produtos-search?cod_produto=${this.busca}`)
+          console.log('pedido', response.data.data)
+          this.pedidoslocal = Object.assign({},this.pedidoslocal, {quantidade: 1}, response.data.data[0])
+          
 
-            const response = await axios.get(`produtos/${this.busca}`);
-
-            this.pedidoslocal = Object.assign({},{ 
-                id: null, 
-                cod_produto: '', 
-                nome: '', 
-                valor: null,
-                cores:'',
-                tamanhos:'',
-                quantidade: 1
-                },response.data)            
         },
         async adicionarProduto(){
-
-          this.editarPedido();
+          
+          await axios.put(`pedidos/${this.id}/add`,this.pedidoslocal)
+          const response = await axios.get(`pedidos/${this.id}`)
+          this.pedido = response.data
             
-           await axios.put(`pedidos/${this.id}/add`,this.pedidoslocal);
-            
-            const response = await axios.get(`pedidos/${this.id}`);
-            this.pedido = response.data;
-            
-          this.pedidoslocal = { 
-          id: null, 
-          cod_produto: '', 
-          nome: '', 
-          valor: null,
-          cores:'',
-          tamanhos:'',
-          quantidade: 1,
-          selecaocores:"",
-          selecaotamanhos:""},
-
-         this.busca = ""
+          this.pedidoslocal = { id: null, cod_produto: '', nome: '', valor: 0.00, cores:'', tamanhos:'', quantidade: 1, selecaocores:"", selecaotamanhos:"" }
+          
+          this.busca = ""
         },
 
         async fecharPedido(){
-           await axios.put(`pedidos/${this.id}`,this.pedido);
+          await axios.put(`pedidos/${this.id}`,this.pedido)
           this.$router.push('/pedidos') 
         },
 
          async aguardarPedido(){
-          await axios.put(`pedidos/${this.id}`,this.pedido);
-          EventBus.$emit('mensagemAlerta', {texto:"Pedido salvo com sucesso",tipo:"success"});
+          await axios.put(`pedidos/${this.id}`,this.pedido)
+          EventBus.$emit('mensagemAlerta', {texto:"Pedido salvo com sucesso",tipo:"success"})
           this.$router.push('/pedidos') 
         },
 
         async editarPedido(){   
-           await axios.put(`pedidos/${this.id}`,this.pedido);  
+           await axios.put(`pedidos/${this.id}`,this.pedido)  
         },
 
-       buscar(event) {
-         this.busca = event.target.value
-  
-          const Objeto = Object.assign({}, this.produtos.find(c => c.id === +this.busca || c.cod_produto === this.busca))
-
-          this.pedidoslocal = Object.assign({},{ 
-          id: null, 
-          cod_produto: '', 
-          nome: '', 
-          valor: null,
-          cores:'',
-          tamanhos:'',
-          quantidade: 1,
-          selecaocores:"",
-          selecaotamanhos:""
-           },Objeto)
-          
-       },
   },
 }
 </script>

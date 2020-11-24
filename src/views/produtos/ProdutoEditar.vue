@@ -72,8 +72,7 @@
           separator=" "
           placeholder="Informe os Tamanhos"
         ></b-form-tags>
-       
-
+      
 
       <b-button class="mt-4" type="submit" variant="primary">Salvar</b-button>
 
