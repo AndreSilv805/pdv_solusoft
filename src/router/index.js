@@ -38,10 +38,10 @@ const extrairParametroId = route => ({
 const routes = [
    
    {
-    path: '/',
+    path: '',
     name: 'Home',
     component: Home
-  },
+   },
 
   ////rotas produtos  
   { 

@@ -1,5 +1,13 @@
 <template>
-    <div class="container py-4"> 
+    <div class="container py-4">
+    <b-alert
+            :show="dismissCountDown"
+            dismissible
+            :variant="mensagem.tipo"
+            @dismiss-count-down="countDownChanged"
+      >
+            {{mensagem.texto}}
+     </b-alert>  
      <div class="row">
             <div class="col-sm-10">
                 <h1 class="font-weight-light">Editar de Clientes</h1>
@@ -81,6 +89,11 @@ export default {
     },
     data() {
          return {
+              mensagem:{
+                  texto:'',
+                  tipo:'',
+              },
+              dismissCountDown:0,
              cliente: {
                 cod_cliente:'',
                 nome: '',
@@ -104,11 +117,23 @@ export default {
     
     methods:{
         async editarCliente(){
-
+            try{
             const response = await axios.put(`clientes/${this.id}`,this.cliente);
             console.log('GET /cliente', response)
             EventBus.$emit('mensagemAlerta', {texto:"Cadastro salvo com sucesso",tipo:"success"});
             this.$router.push('/clientes')
+            }catch(error) {
+                    this.mensagem.tipo = "danger";
+                    this.dismissCountDown = 20;
+                     if (error.response) {
+                        this.mensagem.texto = `Erro ao cadastrar Cliente - Servidor retornou um erro: ${error.message} ${error.response.statusText}`;
+                    } else if (error.request) {
+                        this.mensagem.texto = `Erro ao tentar comunicar com o servidor: ${error.message}`;
+                    } else {
+                        this.mensagem.texto = `Erro ao fazer requisição ao servidor: ${error.message}`;
+                    }
+                }
+
         },
         async pegarCliente(){
 
@@ -116,6 +141,10 @@ export default {
             console.log('GET /cliente', response)
             this.cliente = response.data;
         },
+
+        countDownChanged(dismissCountDown) {
+            this.dismissCountDown = dismissCountDown
+        }
     }
 
 }

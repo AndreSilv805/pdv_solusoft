@@ -1,6 +1,13 @@
 <template>
     <div class="container py-4" >
-    
+     <b-alert
+            :show="dismissCountDown"
+            dismissible
+            :variant="mensagem.tipo"
+            @dismiss-count-down="countDownChanged"
+      >
+            {{mensagem.texto}}
+     </b-alert> 
      <div> 
      <div class="row">
             <div class="col-sm-10">
@@ -99,7 +106,11 @@ export default {
     },
     data() {
         return {
-            mensagemErro: undefined,
+            mensagem:{
+                texto:'',
+                tipo:'',
+            },
+            dismissCountDown:0,
             produto: {
                 cod_produto:'',
                 nome:'',
@@ -121,18 +132,33 @@ export default {
     },
     
   methods:{
-         editarProduto() { 
-            axios.put(`produtos/${this.id}`,this.produto)
-                .then(() => {
-                    EventBus.$emit('mensagemAlerta', {texto:"Produto salvo com sucesso",tipo:"success"});
-                    this.$router.push('/produtos')
-                })    
+        async editarProduto() { 
+            try {
+                await axios.put(`produtos/${this.id}`,this.produto);
+                EventBus.$emit('mensagemAlerta', {texto:"Produto salvo com sucesso",tipo:"success"});
+                this.$router.push('/produtos')
+
+                } catch(error) {
+                    this.mensagem.tipo = "danger";
+                    this.dismissCountDown = 20;
+                     if (error.response) {
+                        this.mensagem.texto = `Erro ao cadastrar Produto - Servidor retornou um erro: ${error.message} ${error.response.statusText}`;
+                    } else if (error.request) {
+                        this.mensagem.texto = `Erro ao tentar comunicar com o servidor: ${error.message}`;
+                    } else {
+                        this.mensagem.texto = `Erro ao fazer requisição ao servidor: ${error.message}`;
+                    }
+                }
             },
 
         async pegarProduto(){
             const response = await axios.get(`produtos/${this.id}`);
             this.produto = response.data;
         },
+
+         countDownChanged(dismissCountDown) {
+            this.dismissCountDown = dismissCountDown
+    },
     }
     
 }
